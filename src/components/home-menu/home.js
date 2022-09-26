@@ -33,7 +33,7 @@ function Home() {
         </button>
         <li > </li>
         <button type="button" class="btn btn-secondary btn-block btn-outline-white" data-toggle="tooltip" data-placement="bottom" title="Consiste en combinar linealmente dos o más matrices mediante la adición de sus elementos dependiendo de su situación dentro de la matriz origen respetando el orden de los factores." onClick = {notAvailable}>
-            Multiplicación de Matrices 
+            Multiplicación de Matrices  
         </button>
         <li> </li>
         <button type="button" class="btn btn-secondary btn-block btn-outline-white" data-toggle="tooltip" data-placement="bottom" title="Botón para salir del programa" >
