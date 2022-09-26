@@ -5,5 +5,6 @@ export function notAvailable(){
         icon: 'error',
         title: 'Lo sentimos...',
         text: 'El algoritmo no está disponible',
+        confirmButtonColor: '#3085d6',
       })
 }
