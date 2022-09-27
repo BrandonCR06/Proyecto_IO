@@ -3,7 +3,11 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
+En el directorio del proyecto, con node instalado, se deben de correr los siguientes comandos:
 
+### `npm install`
+y 
+### `npm install sweetalert2`
 In the project directory, you can run:
 
 ### `npm start`
