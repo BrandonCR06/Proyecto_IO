@@ -20,7 +20,8 @@ class FloydW extends React.Component{
         }
     
         let z = 0;
-        let lista = new Array(n);
+        let columnas = [];
+        let filas = [];
         
         //Inicio del algoritmo
         
@@ -48,18 +49,31 @@ class FloydW extends React.Component{
             for (let i  = 0 ; i < D0.length ; i++){
                 for (let j = 0; j < D0.length ; j++){
                     let celda = anterior[i][j];
+                    let bgColor = "bg-dark";
                     let val =Math.min(anterior[i][j],anterior[i][k]+anterior[k][j]);
                     actual[i][j] = Math.min(anterior[i][j],anterior[i][k]+anterior[k][j])
+
                     if(val!= celda){
+                        bgColor = "bg-warning text-dark";
                         Tabla_P[i][j] = k+1
                     }
-                }                    
+                    columnas.push(Columns(bgColor,val));
+                }
+                let f = columnas
+                filas.push(f);
+                columnas = [];                  
+
                 }
     
                 z = k              
+                
+                
                 anterior = actual                                
                 actual = new Array(n);                
-                TablaDeTablas.push(anterior);
+                
+                TablaDeTablas.push(Tabla(anterior,k,filas));
+                filas = [];
+                
                 
                 
                 
@@ -102,14 +116,14 @@ class FloydW extends React.Component{
     }
 
 }
-const tituloTabla = ({item}) => <h2>{item}</h2>
+
 function desplegarTablas(datos){
     return(
         <div>                             
              {datos.map((dato,index) => {                                  
                 
                 return (                    
-                    Tabla(dato,index)
+                    datos[index]
                 )
                     
                 })}                       
@@ -120,23 +134,32 @@ function desplegarTablas(datos){
 
 }
 
-function Tabla(data, index) {
-                
+const Tdes = ({item,col}) => <td class = {item} scope="col">{col}</td>
+function Columns(bg,col){
+    return (        
+        <td class = {bg} scope="col">{col}</td>
+    )
+}
+function Tabla(data,index,filas) {    
+    //cambiar el color
+         
         return (                                                
                         
             
             <div >
-            <h3 class = "text-white font-12">{"D("+index+")"}</h3>
+            <h3 class = "text-white font-12">{"D("+(index+1)+")"}</h3>
             <table class = "table table-dark">
             
-            {data.map(row => {  
+            {data.map((row,i) => {  
                 return(
                     <thead class="thead-light">
                     <tr>
-                    {row.map(col => {
+                    {row.map((col,j) => {                              
                         return(                            
-                            <td scope="col">{col}</td>                                                                                                                               
+                            filas[i][j]                                                                             
                         )
+                        
+                        
                     })}     
                     </tr>           
                     </thead>
