@@ -12,9 +12,9 @@ function Home() {
       <br></br>
       <div class="text-center">        
         <div class="btn-group-lg btn-group-vertical">          
-        <button type="button" class="btn btn-secondary btn-outline-white" data-toggle="tooltip" data-placement="bottom" title="Algoritmo de análisis sobre grafos para encontrar el camino mínimo" onClick = {notAvailable}>
+        <a href="/Floyd" type="button" class="btn btn-secondary btn-outline-white" data-toggle="tooltip" data-placement="bottom" title="Algoritmo de análisis sobre grafos para encontrar el camino mínimo" >
           Rutas más cortas 
-        </button>
+        </a>
         <li > </li>
         <button type="button" class="btn btn-secondary btn-block btn-outline-white" data-toggle="tooltip" data-placement="bottom" title="Es un problema de optimización combinatoria, es decir, que busca la mejor solución entre un conjunto finito de posibles soluciones a un problema." onClick = {notAvailable}>
           Problema de la mochila
