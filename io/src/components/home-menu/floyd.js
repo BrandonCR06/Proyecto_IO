@@ -9,7 +9,8 @@ class FloydW extends React.Component{
         let INFINITE = 99999;
         let n = D0.length; 
         let Tabla_P = new Array(n);        
-        let actual = new Array(n);        
+        let actual = new Array(n);   
+        let TablaDeTablas = [];
         for (let i =0 ; i < n ; i++){
             Tabla_P[i] =new Array(n)
             for (let j =0 ; j < n ; j++){
@@ -17,9 +18,6 @@ class FloydW extends React.Component{
             }		    
             Tabla_P[i][i] = 0
         }
-       
-        
-     
     
         let z = 0;
         let lista = new Array(n);
@@ -36,12 +34,11 @@ class FloydW extends React.Component{
             } 
     
             
-            for(let r = 0 ; r < D0.length;  r ++){                
-                console.log(k,r,"Values:",actual[k][r] ,"   ",anterior[k][r]);  
+            for(let r = 0 ; r < D0.length;  r ++){                                
                 actual[k][r] = anterior[k][r];   
                                       
                 actual[r][k] = anterior[r][k];                
-                console.log(r,k,"Values:",actual[r][k] ,"   ",anterior[r][k]);                                                                  
+                
               
             }	
     
@@ -60,28 +57,27 @@ class FloydW extends React.Component{
                 }
     
                 z = k              
-                anterior = actual
-                console.log(anterior);
-    
-                actual = new Array(n);
-    
+                anterior = actual                                
+                actual = new Array(n);                
+                TablaDeTablas.push(anterior);
+                
                 
                 
                 
                             
                             
             }   
-            return anterior;
+            console.log(TablaDeTablas);
+            return TablaDeTablas;
     
     
                        
         
     
     }  
-                  
-    
+                      
     render(){    
-        let inf = 999
+        let inf = 9999
         let  m = [[0,6,inf,4,7],
         [9,0,7,inf,inf],
         [inf,5,0,inf,14],
@@ -94,26 +90,72 @@ class FloydW extends React.Component{
         [inf,inf,inf,0,inf],
         [inf,inf,inf,inf,0]
         ]    
-        console.log(this.floyd(m));
-        
-   
-   
-        
+                
+        const data = this.floyd(m)
     
         return (
-            <h1 class='text-center text-white'>Algoritmo de fd</h1>
+            
+            desplegarTablas(data)
         
 
         )
     }
 
 }
+const tituloTabla = ({item}) => <h2>{item}</h2>
+function desplegarTablas(datos){
+    return(
+        <div>                             
+             {datos.map((dato,index) => {                                  
+                
+                return (                    
+                    Tabla(dato,index)
+                )
+                    
+                })}                       
+
+              
+        </div>
+    )
+
+}
+
+function Tabla(data, index) {
+                
+        return (                                                
+                        
+            
+            <div >
+            <h3 class = "text-white font-12">{"D("+index+")"}</h3>
+            <table class = "table table-dark">
+            
+            {data.map(row => {  
+                return(
+                    <thead class="thead-light">
+                    <tr>
+                    {row.map(col => {
+                        return(                            
+                            <td scope="col">{col}</td>                                                                                                                               
+                        )
+                    })}     
+                    </tr>           
+                    </thead>
+                )
+            })}            
+                
+            </table>            
+            </div>            
+        );
+    
+}
+
+
 function Floyd() {
   return (
-    <div class = "p-4">       
+    <div class = "p-4 ms-auto">       
       <h1 class='text-center text-white'>Algoritmo de Floyd</h1>
       <FloydW>
-
+            
         </FloydW>
       
     </div>

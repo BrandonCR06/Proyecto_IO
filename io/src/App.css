@@ -1,7 +1,6 @@
 html, body {
   background-image: url("./assets/fondo.jpg");
   background-size: cover;
-  background-repeat: no-repeat;
   height: 100%;
   width: 100%;
 }
@@ -17,3 +16,6 @@ html, body {
 li { /* styles all li elements*/
   opacity: 0;
 }
+
+
+
