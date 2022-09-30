@@ -10,41 +10,74 @@ class FloydW extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
-          matrix: []
+          matrix: [],
+          vertices :[]
         };
       }
-      updateMatrix = (value) =>{
-        this.setState({matrix:value});
+      updateMatrix = (value,v) =>{
+        this.setState({matrix:value,
+            vertices: v
+        });
+        
 
       }
+     
     
      floyd(D0){        
         let anterior = D0;
-        let INFINITE = 99999;
+        let INFINITE = Number.MAX_SAFE_INTEGER;
         let n = D0.length; 
         let Tabla_P = new Array(n);        
         let actual = new Array(n);   
         let TablaDeTablas = [];
         let columnas = [];
         let filas = [];
+        let filasP = [];        
+        let colP = [];
+        
+        columnas.push(Columns("bg-primary bg-opacity-10 text-dark",""))
+        for(let l = 0 ; l < this.props.vertices.length; l++){
+            columnas.push(Columns("bg-primary bg-opacity-25 text-light",this.props.vertices[l]));
+        }
+        filas.push(columnas);
+        filasP.push(columnas);
+        columnas  =[]
+        
         for (let i =0 ; i < n ; i++){
             Tabla_P[i] =new Array(n)
             let bgColor = "bg-dark";
+            
+            columnas.push(Columns("bg-primary bg-opacity-25 text-light",this.props.vertices[i]));
+            colP.push(Columns("bg-primary bg-opacity-25 text-light",this.props.vertices[i]));
             for (let j =0 ; j < n ; j++){
-                Tabla_P[i][j] = INFINITE;
+                Tabla_P[i][j] = 0                
                 let val = D0[i][j]
+                let valP = Tabla_P[i][j];
                 if(D0[i][j]===Number.MAX_SAFE_INTEGER){
-                    val = "∞"
+                    val = "∞"                    
+                    
                 }
+                if(Tabla_P[i][j]===Number.MAX_SAFE_INTEGER){valP = "∞"}
+
                 columnas.push(Columns(bgColor,val))
+                colP.push(Columns("bg-light bg-opacity-75 text-dark",valP))
             }	
             filas.push(columnas)	
-            columnas = [];    
-            Tabla_P[i][i] = 0
+            filasP.push(colP)            
+            columnas = [];  
+            colP = [];  
+            
         }
 
-        TablaDeTablas.push(Tabla(anterior,-1,filas));
-        filas = []
+        TablaDeTablas.push(Tabla(-1,filas));
+        TablaDeTablas.push(TablaP(filasP));
+        
+        filas = [];                                
+        columnas = [];
+        filasP = [];
+        colP = [];
+
+        
 
         
         
@@ -70,27 +103,44 @@ class FloydW extends React.Component{
             }	
     
             
+            columnas.push(Columns("bg-primary bg-opacity-10",""))
             
-                                        
+            for(let l = 0 ; l < this.props.vertices.length; l++){
+                columnas.push(Columns("bg-primary bg-opacity-25 text-light ",this.props.vertices[l]));
+            
+            }
+            filas.push(columnas);
+            filasP.push(columnas)
+            columnas  =[]
+                
             for (let i  = 0 ; i < D0.length ; i++){
+                columnas.push(Columns("bg-primary bg-opacity-25 text-light ",this.props.vertices[i]));
+                colP.push(Columns("bg-primary bg-opacity-25 text-light ",this.props.vertices[i]));
                 for (let j = 0; j < D0.length ; j++){
                     let celda = anterior[i][j];
                     let bgColor = "bg-dark";
+                    let bgP = "bg-light bg-opacity-75 text-dark";
                     let val =Math.min(anterior[i][j],anterior[i][k]+anterior[k][j]);
+                    
                     actual[i][j] = Math.min(anterior[i][j],anterior[i][k]+anterior[k][j])
 
                     if(val!== celda){
-                        bgColor = "bg-warning text-dark";
+                        bgColor = "bg-warning text-dark bg-opacity-75 text-dark";
+                        bgP = bgColor
                         Tabla_P[i][j] = k+1
                     }
+                    let valP = Tabla_P[i][j];
                     if(val ===Number.MAX_SAFE_INTEGER){
                         val = "∞"
                     }
+                    colP.push(Columns(bgP,valP));
                     columnas.push(Columns(bgColor,val));
                 }
                 let f = columnas
                 filas.push(f);
-                columnas = [];                  
+                filasP.push(colP)
+                columnas = [];   
+                colP = []               
 
                 }
     
@@ -100,8 +150,12 @@ class FloydW extends React.Component{
                 anterior = actual                                
                 actual = new Array(n);                
                 
-                TablaDeTablas.push(Tabla(anterior,k,filas));
+                TablaDeTablas.push(Tabla(k,filas));
+                TablaDeTablas.push(TablaP(filasP));
+                                
+                
                 filas = [];
+                filasP = []
                 
                 
                 
@@ -136,10 +190,10 @@ class FloydW extends React.Component{
 function desplegarTablas(datos){
     return(
         <div>                             
-             {datos.map((dato,index) => {                                  
+             {datos.map(dato => {                                  
                 
                 return (                    
-                    datos[index]
+                    dato
                 )
                     
                 })}                       
@@ -150,17 +204,53 @@ function desplegarTablas(datos){
 
 }
 function leerCsv(texto, sep = ",", omitHeader = false){
-    return texto.slice(omitHeader ? texto.indexOf("\n") : 0).split("\n").map(l => l.split(sep));    
+    return texto.slice(omitHeader ? texto.indexOf("\n")+1 : 0).split("\n").map(l => l.split(sep));    
+
+}
+function leerCsvHeader(texto, sep = ","){
+    return texto.split("\n")[0].split(sep);
 
 }
 
 
 function Columns(bg,col){
+    
     return (        
-        <td class = {bg} scope="col">{col}</td>
+        <td class = {bg+" wid"} scope="col">{col}</td>
     )
 }
-function Tabla(data,index,filas) {    
+function TablaP(filas) {    
+    //cambiar el color
+         
+        return (                                                
+                        
+            
+            <div >
+            <h3 class = "text-white font-12">{"Tabla P"}</h3>
+            <table class = "table-bordered table table-dark">
+            
+            {filas.map((row,i) => {  
+                return(
+                    <thead class="thead-light">
+                    <tr>
+                    {row.map((col,j) => {                              
+                        return(                            
+                            filas[i][j]                                                                             
+                        )
+                        
+                        
+                    })}     
+                    </tr>           
+                    </thead>
+                )
+            })}            
+                
+            </table>            
+            </div>            
+        );
+    
+}
+function Tabla(index,filas) {    
     //cambiar el color
          
         return (                                                
@@ -168,9 +258,9 @@ function Tabla(data,index,filas) {
             
             <div >
             <h3 class = "text-white font-12">{"D("+(index+1)+")"}</h3>
-            <table class = "table table-dark">
+            <table class = "table-bordered table table-dark">
             
-            {data.map((row,i) => {  
+            {filas.map((row,i) => {  
                 return(
                     <thead class="thead-light">
                     <tr>
@@ -222,14 +312,19 @@ class  App extends React.Component {
         super(props);
         this.state = {
             inputLinkClicked: false,
-            m :[]
+            m :[],
+            vertices :[]
           }
       }
       handleAddSecondInput() {        
         this.state.inputLinkClicked = true;
       }
-      changeM= (value) =>{
-        this.setState({m:value});
+      changeM= (value,v) =>{
+        this.setState({m:value, vertices:v});
+
+      }
+      changeV= (value) =>{
+        this.setState({vertices:value});
 
       }
        setd = (e)=>{
@@ -239,7 +334,11 @@ class  App extends React.Component {
         reader.onload = (e) => {
             
           const text = e.target.result;
-          {this.changeM( parseM(leerCsv(text)))}
+          {console.log(leerCsvHeader(text));}          
+          
+          
+          {this.changeM( parseM(leerCsv(text,",",true)),leerCsvHeader(text))}
+          {console.log(this.state.vertices);}
            
            
                           
@@ -262,7 +361,7 @@ class  App extends React.Component {
     // use the toString() method to convert
     // Buffer into String
     
-    //console.log(leerCsv(texto));    
+    
         
     let inf = 9999;
     let g = [[0,6,inf,4,7],
@@ -270,14 +369,20 @@ class  App extends React.Component {
     [inf,5,0,inf,14],
     [8,1,inf,0,15],
     [2,inf,2,19,0]]
+    let h =  ["New York","B","C","D","E"]
     return(
         <div id = "1"class = "p-4 ms-auto">       
         <h1 class='text-center text-white'>Algoritmo de Floyd</h1>            
-        <input  type = "file" onChange={this.setd}/>             
-                               
+        <div class="mb-3 cont">
+            
+            <input  class=" form-control text-white bg-dark" type="file" id="formFile" onChange={this.setd}></input>
+        </div>
+        
+                             
+        
             {this.state.inputLinkClicked?              
             
-              <FloydW matrix = {this.state.m}></FloydW>              
+              <FloydW vertices = {this.state.vertices} matrix = {this.state.m}></FloydW>              
               :
 
               <div></div>

@@ -17,5 +17,13 @@ li { /* styles all li elements*/
   opacity: 0;
 }
 
+.cont{
+  max-width: 28%;
+}
+
+.wid{
+  max-width: 20px;
+}
+
 
 
