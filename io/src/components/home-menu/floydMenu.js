@@ -98,12 +98,10 @@ class App extends React.Component {
 
 
       handleChangePeso(evt, i, j) {
-        const val = evt.target.value;               /*AQUI DEBE ACTUALIZARSE*/
-        console.log(val)
+        const val = evt.target.value;               /*AQUI DEBE ACTUALIZARSE*/        
         let list = this.state.matriz;
         list[i][j] = val
-        this.changeMatriz(list);
-        console.log(this.state.matriz)
+        this.changeMatriz(list);        
         return list[i][j]
       }
 

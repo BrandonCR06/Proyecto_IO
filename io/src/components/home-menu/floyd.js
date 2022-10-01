@@ -127,7 +127,8 @@ class FloydW extends React.Component{
                     if(val!== celda){
                         bgColor = "bg-warning text-dark bg-opacity-75 text-dark";
                         bgP = bgColor
-                        Tabla_P[i][j] = k+1
+                        //Tabla_P[i][j] = k+1
+                        Tabla_P[i][j] = this.props.vertices[k]
                     }
                     let valP = Tabla_P[i][j];
                     if(val ===Number.MAX_SAFE_INTEGER){
@@ -334,11 +335,10 @@ class  App extends React.Component {
         reader.onload = (e) => {
             
           const text = e.target.result;
-          {console.log(leerCsvHeader(text));}          
           
           
-          {this.changeM( parseM(leerCsv(text,",",true)),leerCsvHeader(text))}
-          {console.log(this.state.vertices);}
+          
+          {this.changeM( parseM(leerCsv(text,",",true)),leerCsvHeader(text))}          
            
            
                           
