@@ -288,14 +288,13 @@ class App extends React.Component {
                 }
                 string +="\n"
             }
-            console.log("string")
-            console.log(string)
+            
+            
             return string;
         }
 
         handleSaveFile = () => {
-            let matrix = this.matrixToString()
-            console.log(matrix)
+            let matrix = this.matrixToString()            
             const blob = new Blob( [
                 this.state.vertices+"\n",
                 matrix
@@ -341,7 +340,8 @@ class App extends React.Component {
             <br></br>
             <div class="btn-toolbar">
             <button onClick={this.handleFloyd} type="button" class="btn btn-secondary btn-outline-white">Generar algoritmo </button>
-            <button onClick={this.handleSaveFile} type="button" class="btn btn-secondary btn-outline-white">Grabar en archivo</button>
+            <br></br>
+            
             </div>
         </div>
         :
@@ -349,8 +349,11 @@ class App extends React.Component {
           }
           
           {this.state.floydBoolean?
+                <div>
+                    <FloydW vertices = {this.state.vertices} matrix = {this.state.matriz}></FloydW>
+                    <button onClick={this.handleSaveFile} type="button" class="btn btn-secondary btn-outline-white">Grabar en archivo</button>
+                </div>
                 
-                <FloydW vertices = {this.state.vertices} matrix = {this.state.matriz}></FloydW>
                 
             :
             <div id  ="floyd"></div>}

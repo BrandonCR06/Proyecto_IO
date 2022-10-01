@@ -205,7 +205,12 @@ function desplegarTablas(datos){
 
 }
 function leerCsv(texto, sep = ",", omitHeader = false){
-    return texto.slice(omitHeader ? texto.indexOf("\n")+1 : 0).split("\n").map(l => l.split(sep));    
+    let m = texto.slice(omitHeader ? texto.indexOf("\n")+1 : 0).split("\n");
+    let split = m.length
+    if(m[m.length-1]===""){
+        split = m.length-1;
+    }
+    return m.slice(0,split).map(l => l.split(sep));    
 
 }
 function leerCsvHeader(texto, sep = ","){
@@ -336,6 +341,7 @@ class  App extends React.Component {
             
           const text = e.target.result;
           
+                    
           
           
           {this.changeM( parseM(leerCsv(text,",",true)),leerCsvHeader(text))}          
