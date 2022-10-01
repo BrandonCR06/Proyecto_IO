@@ -11,7 +11,8 @@ class FloydW extends React.Component{
         super(props);
         this.state = {
           matrix: [],
-          vertices :[]
+          vertices :[],
+          tablaP: []
         };
       }
       updateMatrix = (value,v) =>{
@@ -20,6 +21,9 @@ class FloydW extends React.Component{
         });
         
 
+      }
+      updatePTable=(value) => {
+        this.state.tablaP = value;
       }
      
     
@@ -128,9 +132,13 @@ class FloydW extends React.Component{
                         bgColor = "bg-warning text-dark bg-opacity-75 text-dark";
                         bgP = bgColor
                         //Tabla_P[i][j] = k+1
-                        Tabla_P[i][j] = this.props.vertices[k]
+                        Tabla_P[i][j] = k+1
                     }
-                    let valP = Tabla_P[i][j];
+                    let valP = 0
+                    if(Tabla_P[i][j]!==0){
+                        valP = this.props.vertices[Tabla_P[i][j]-1];
+                    }
+                    
                     if(val ===Number.MAX_SAFE_INTEGER){
                         val = "∞"
                     }
@@ -166,7 +174,7 @@ class FloydW extends React.Component{
                             
             }   
             
-            return TablaDeTablas;
+            return [TablaDeTablas,Tabla_P];
     
     
                        
@@ -176,11 +184,15 @@ class FloydW extends React.Component{
                       
     render(){            
         
-        const data = this.floyd(this.props.matrix)
+        const data = this.floyd(this.props.matrix);
+        const mat = data[0]
+        const tablaP = data[1]
+        this.updatePTable(tablaP);
+        console.log(this.state.tablaP)
     
         return (
             
-            desplegarTablas(data)
+            desplegarTablas(mat)
         
 
         )
