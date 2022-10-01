@@ -1,5 +1,6 @@
 import React from "react";
 import {Floyd,FloydW} from './floyd.js';
+import fileSaver from "file-saver";
 
 
 function nodes(list) {
@@ -264,6 +265,45 @@ class App extends React.Component {
             
         }
 
+        matrixToString() {
+            let string = ""
+            for (let i = 0; i < this.state.matriz.length; i++) {
+                for(let j = 0; j < this.state.matriz.length; j++) {
+                    
+                    let valor = this.state.matriz[i][j]
+
+                    if (valor == Number.MAX_SAFE_INTEGER) {
+                        valor = "inf"
+                    }
+
+
+                    if (j == this.state.matriz.length-1) {
+                        string += valor
+                    } 
+                    
+                    else {
+                        string += valor
+                        string += ","
+                    }
+                }
+                string +="\n"
+            }
+            console.log("string")
+            console.log(string)
+            return string;
+        }
+
+        handleSaveFile = () => {
+            let matrix = this.matrixToString()
+            console.log(matrix)
+            const blob = new Blob( [
+                this.state.vertices+"\n",
+                matrix
+            ], { type: 'text/plan;charset=utf8'});
+            fileSaver.saveAs( blob, "archivoGenerado.txt");
+            
+        }
+
        setd = (e)=>{
         this.state.nodos = e.target.value
         this.changeInputNodes(this.state.nodos)
@@ -299,7 +339,10 @@ class App extends React.Component {
         <div>
             {pesos(this.state.inputsPesos)}
             <br></br>
-            <button onClick={this.handleFloyd} type="button" class="btn btn-secondary btn-block btn-outline-white">Generar algoritmo</button>
+            <div class="btn-toolbar">
+            <button onClick={this.handleFloyd} type="button" class="btn btn-secondary btn-outline-white">Generar algoritmo </button>
+            <button onClick={this.handleSaveFile} type="button" class="btn btn-secondary btn-outline-white">Grabar en archivo</button>
+            </div>
         </div>
         :
             <div id  ="pesos"></div>
@@ -310,7 +353,7 @@ class App extends React.Component {
                 <FloydW vertices = {this.state.vertices} matrix = {this.state.matriz}></FloydW>
                 
             :
-            <div id  ="caca"></div>}
+            <div id  ="floyd"></div>}
               
     </div>
     )
