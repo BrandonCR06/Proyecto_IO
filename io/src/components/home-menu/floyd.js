@@ -1,6 +1,6 @@
 import '../../App.css';
 import React, { useCallback } from 'react';
-
+import FloydMenu from './floydMenu';
 
 
 
@@ -358,25 +358,20 @@ class  App extends React.Component {
     // and passing the path to the file
     
 
-    // use the toString() method to convert
-    // Buffer into String
+   
     
     
         
-    let inf = 9999;
-    let g = [[0,6,inf,4,7],
-    [9,0,7,inf,inf],
-    [inf,5,0,inf,14],
-    [8,1,inf,0,15],
-    [2,inf,2,19,0]]
-    let h =  ["New York","B","C","D","E"]
+   
     return(
-        <div id = "1"class = "p-4 ms-auto">       
+        <div  id = "1"class = "p-4 ms-auto">       
         <h1 class='text-center text-white'>Algoritmo de Floyd</h1>            
-        <div class="mb-3 cont">
-            
-            <input  class=" form-control text-white bg-dark" type="file" id="formFile" onChange={this.setd}></input>
+        <div class="mb-3 cont">            
+        <h4 class=' text-white'>Seleccionar un archivo de prueba</h4>            
+        <input  class=" form-control text-white bg-dark" type="file" id="formFile" onChange={this.setd}></input>
+                   
         </div>
+        {FloydMenu()}
         
                              
         
@@ -398,5 +393,5 @@ function Floyd(){
     );
 
 }
+export  {Floyd,FloydW};
 
-export default Floyd;

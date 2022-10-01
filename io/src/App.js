@@ -1,6 +1,6 @@
 import {BrowserRouter, Routes, Route} from 'react-router-dom';
 import Home from './components/home-menu/home.js';
-import Floyd from './components/home-menu/floyd.js';
+import {Floyd,FloydW} from './components/home-menu/floyd.js';
 import FloydMenu from './components/home-menu/floydMenu.js';
 
 function App() {

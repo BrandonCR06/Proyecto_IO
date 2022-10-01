@@ -1,0 +1,5 @@
+Aquí,Acá,Allá,Acullá
+0,14,inf,4
+3,0,7,9
+inf,2,0,7
+8,inf,5,0

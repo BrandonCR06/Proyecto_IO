@@ -1,5 +1,5 @@
 import React from "react";
-
+import {Floyd,FloydW} from './floyd.js';
 
 
 function nodes(list) {
@@ -47,8 +47,7 @@ function matrizPorDefecto(list) {
 
 function intToChar(int) {
     // 👇️ for Uppercase letters, replace `a` with `A`
-    const code = 'A'.charCodeAt(0);
-    console.log(code); // 👉️ 97
+    const code = 'A'.charCodeAt(0);    
   
     return String.fromCharCode(code + int);
   }
@@ -65,9 +64,10 @@ class App extends React.Component {
             m :[],
             nodos : 0,
             listNodesName: [],
+            floydBoolean: false,
             vertices: [],
             inputsPesos: [],
-            matriz:[[]]
+            matriz:[]
           }
       }
 
@@ -102,18 +102,21 @@ class App extends React.Component {
         console.log(val)
         let list = this.state.matriz;
         list[i][j] = val
-        this.setState({matriz:list})
+        this.changeMatriz(list);
+        console.log(this.state.matriz)
         return list[i][j]
       }
 
     accessElement(i, j) {
-        let m = this.state.matriz
-        console.log("MATRIZ")
-        console.log(m)
+        let m = this.state.matriz        
         return m[i][j]
     }
     
      generateTD(matriz, lista, i, j) {
+        let val = matriz[i][j]
+        if(matriz[i][j]===Number.MAX_SAFE_INTEGER){
+            val = "∞"
+        }
         if (matriz[i][j] == 0) {
             return(
                 <div class='col'>
@@ -125,11 +128,13 @@ class App extends React.Component {
             return(
                 <div class='col'>
                     <h5 class='text-white'>De {lista[i]} → {lista[j]}</h5>
-                    <input 
-                        class='col-xs-1' 
-                        type='number'
-                        value = {matriz[i][j]}
-                        onChange={evt => this.handleChangePeso(evt, i, j)}></input>
+                
+                    <input                         
+                        className="input"                        
+                        type={"text"}
+                        defaultValue = {val}
+                        onChange={evt => this.handleChangePeso(evt, i, j)}>                            
+                        </input>
                 </div>
             )
         }
@@ -161,15 +166,22 @@ class App extends React.Component {
         )
     }
     
-    
+    changeMatriz = (value) =>{
+        
+        this.state.matriz = value;
+        
+        
+      }
      generar_pesos = (lista) => {
 
         let list = []
-        console.log("lista")
-        console.log(lista)
+        
+        
         let matriz = matrizPorDefecto(lista)
-        console.log("MATRIZ-----")
-        console.log(matriz)
+        
+        
+        this.changeMatriz(matriz);
+
         list.push(this.generadorInputPesos2(matriz, lista))
         this.changeM(list)   
     }
@@ -187,15 +199,15 @@ class App extends React.Component {
       changeFlag2= () => {
         this.state.flag2 = true;
       }
+      changeFloydBoolean= () => {
+        this.setState({floydBoolean:true});
+      }
 
       changeM = (value) =>{
         this.setState({m:value});
       }
 
-
-      changeMatriz = (value) =>{
-        this.setState({matriz:value});
-      }
+      
 
 
       changeInputNodes = (value) => {
@@ -238,6 +250,21 @@ class App extends React.Component {
             // PESOS
             this.generar_pesos(list)
         }
+        handleFloyd = (e) => {
+            let mat = this.state.matriz;
+            for(let i = 0 ; i < mat.length; i++){
+                for(let j = 0 ; j < mat.length; j++){
+                    mat[i][j] = Math.floor(mat[i][j]);
+                }
+
+            }
+            this.changeMatriz(mat);
+            
+            this.changeFloydBoolean();           
+          
+
+            
+        }
 
        setd = (e)=>{
         this.state.nodos = e.target.value
@@ -250,18 +277,17 @@ class App extends React.Component {
     render(){
 
     return(
-    <div id = "1"class = "p-4 ms-auto">       
-        <h1 class='text-center text-white'>Algoritmo de Floyd</h1>            
-        <div class="mb-3 cont">
+    <div  style ={{display:"inline"}} id = "1"class = "p-4 ms-auto">       
+                 
+        <div class="mb-3 cont">            
+                        
+            <h4 class='text-white'>Ingresar la cantidad de nodos</h4>
+            <input  class=" form-control text-white bg-dark" type="number" id="formNodes" onChange={this.setd}></input>            
             <br></br>
-            <h4 class='text-white'>Ingrese la cantidad de nodos</h4>
-            <input  class=" form-control text-white bg-dark" type="number" id="formNodes" onChange={this.setd}></input>
-            <br></br>
-            <buttom onClick={this.handleSummit} type="button" class="btn btn-secondary btn-block btn-outline-white">Confirmar</buttom>
+            <button onClick={this.handleSummit} type="button" class="btn btn-secondary btn-block btn-outline-white">Confirmar</button>
         </div>
         
-        {console.log(this.state.flag)}
-        {console.log(this.state.m)}
+        
         {this.state.flag?
         <div>
             {nodes(this.state.m)}
@@ -275,11 +301,18 @@ class App extends React.Component {
         <div>
             {pesos(this.state.inputsPesos)}
             <br></br>
-            <buttom onClick={this.handleSummit2} type="button" class="btn btn-secondary btn-block btn-outline-white">Generar algoritmo</buttom>
+            <button onClick={this.handleFloyd} type="button" class="btn btn-secondary btn-block btn-outline-white">Generar algoritmo</button>
         </div>
         :
             <div id  ="pesos"></div>
           }
+          
+          {this.state.floydBoolean?
+                
+                <FloydW vertices = {this.state.vertices} matrix = {this.state.matriz}></FloydW>
+                
+            :
+            <div id  ="caca"></div>}
               
     </div>
     )
