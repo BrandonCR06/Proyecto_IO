@@ -1,5 +1,5 @@
 import '../../App.css';
-import React, { useCallback } from 'react';
+import React from 'react';
 import FloydMenu from './floydMenu';
 import FloydModal from '../../components/FloydModal';
 
@@ -423,11 +423,11 @@ class  App extends React.Component {
         
    
     return(
-        <div  id = "1"class = "p-4 ms-auto">       
-        <h1 class='text-center text-white'>Algoritmo de Floyd</h1>            
-        <div class="mb-3 cont">            
-        <h4 class=' text-white'>Seleccionar un archivo de prueba</h4>            
-        <input  class=" form-control text-white bg-dark" type="file" id="formFile" onChange={this.setd}></input>
+        <div  id = "1" className = "p-4 ms-auto">       
+        <h1 className='text-center text-white'>Algoritmo de Floyd</h1>            
+        <div className="mb-3 cont">            
+        <h4 className=' text-white'>Seleccionar un archivo de prueba</h4>            
+        <input  className=" form-control text-white bg-dark" type="file" id="formFile" onChange={this.setd}></input>
                    
         </div>
         {FloydMenu()}
