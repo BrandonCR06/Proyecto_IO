@@ -1,6 +1,7 @@
 import '../../App.css';
 import React, { useCallback } from 'react';
 import FloydMenu from './floydMenu';
+import FloydModal from '../../components/FloydModal';
 
 
 
@@ -12,7 +13,8 @@ class FloydW extends React.Component{
         this.state = {
           matrix: [],
           vertices :[],
-          tablaP: []
+          tablaP: [],
+          modalOpen: false
         };
       }
       updateMatrix = (value,v) =>{
@@ -198,6 +200,45 @@ class FloydW extends React.Component{
         )
     }
 
+    calcularRutaCortaAux = (aca,alla,rutaCorta)=>{
+        rutaCorta += `, ${aca} --> ${alla}`;
+        if (TablaP[aca-1][alla-1] === 0){
+            return rutaCorta;
+        }
+        else{
+            this.calcularRutaCortaAux(TablaP[aca-1][alla-1],alla,rutaCorta);
+        }
+    }
+
+
+    calcularRutaCorta = (aca,alla)=>{
+        console.log(`Se desea ir de ${aca} hasta ${alla}`);
+        let rutaCorta = "";
+        let INF = "999";
+        
+        if (aca === alla){
+            rutaCorta = "Es el mismo lugar";
+        }
+        else{
+            if (TablaP[aca-1][alla-1] === 0){
+                rutaCorta += `Ruta directa ${aca} --> ${alla}`;
+            }
+            else{
+                if(TablaP[aca-1][alla-1] === INF){
+                    rutaCorta = "No hay ruta";
+                }
+                else{
+                    rutaCorta += `Ruta Corta: ${aca} --> ${TablaP[aca-1][alla-1]} `;
+                    rutaCorta = this.calcularRutaCortaAux(TablaP[aca-1][alla-1], alla,rutaCorta);
+                }
+            }
+        }
+        console.log(rutaCorta);
+    }
+
+    setAddModalOpen = (flag)=>{
+        this.modalOpen = flag;
+    }
 }
 
 function desplegarTablas(datos){
@@ -393,14 +434,13 @@ class  App extends React.Component {
         
                              
         
-            {this.state.inputLinkClicked?              
-            
-              <FloydW vertices = {this.state.vertices} matrix = {this.state.m}></FloydW>              
+            {this.state.inputLinkClicked?           
+                <FloydW vertices = {this.state.vertices} matrix = {this.state.m}></FloydW> 
               :
 
               <div></div>
             }
-              
+        
     </div>
     )
     } 
@@ -413,3 +453,11 @@ function Floyd(){
 }
 export  {Floyd,FloydW};
 
+
+/*
+<FloydModal
+    isOpen={this.modalOpen}
+    onClose={() => this.setAddModalOpen(true)}
+/>
+
+*/
