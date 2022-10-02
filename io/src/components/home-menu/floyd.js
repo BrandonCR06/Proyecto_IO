@@ -55,15 +55,24 @@ class FloydW extends React.Component{
             
             columnas.push(Columns("bg-primary bg-opacity-25 text-light",this.props.vertices[i]));
             colP.push(Columns("bg-primary bg-opacity-25 text-light",this.props.vertices[i]));
-            for (let j =0 ; j < n ; j++){
-                Tabla_P[i][j] = 0                
+            Tabla_P[i][i] = 0
+            for (let j =0 ; j < n ; j++){                
+                
+                
+                
+                Tabla_P[i][j] = D0[i][j]
+                
                 let val = D0[i][j]
-                let valP = Tabla_P[i][j];
+                let valP = Tabla_P[i][j];                
                 if(D0[i][j]===Number.MAX_SAFE_INTEGER){
+                    Tabla_P[i][j] = Number.MAX_SAFE_INTEGER               
                     val = "∞"                    
-                    
+                    valP = "∞"
+                } else {
+                    Tabla_P[i][j] = 0;
+                    valP = 0;
                 }
-                if(Tabla_P[i][j]===Number.MAX_SAFE_INTEGER){valP = "∞"}
+                
 
                 columnas.push(Columns(bgColor,val))
                 colP.push(Columns("bg-light bg-opacity-75 text-dark",valP))
@@ -136,13 +145,16 @@ class FloydW extends React.Component{
                         //Tabla_P[i][j] = k+1
                         Tabla_P[i][j] = k+1
                     }
-                    let valP = 0
-                    if(Tabla_P[i][j]!==0){
+                    let valP = Tabla_P[i][j]
+                    if(Tabla_P[i][j]!==0 && Tabla_P[i][j]!==Number.MAX_SAFE_INTEGER){
                         valP = this.props.vertices[Tabla_P[i][j]-1];
                     }
                     
                     if(val ===Number.MAX_SAFE_INTEGER){
                         val = "∞"
+                    }
+                    if(valP===Number.MAX_SAFE_INTEGER){
+                        valP = "∞"
                     }
                     colP.push(Columns(bgP,valP));
                     columnas.push(Columns(bgColor,val));
@@ -341,14 +353,6 @@ function Tabla(index,filas) {
     
 }
 
-function F(m){
-    return (
-        <Floyd matrix = {m}>
-
-        </Floyd>
-    )
-
-}
 function parseM(arr){
     let m = new Array(arr.length);
     for(let i = 0 ; i < arr.length; i++){
