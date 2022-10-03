@@ -351,6 +351,7 @@ class App extends React.Component {
           {this.state.floydBoolean?
                 <div>
                     <FloydW vertices = {this.state.vertices} matrix = {this.state.matriz}></FloydW>
+                    <br></br>
                     <button onClick={this.handleSaveFile} type="button" className="btn btn-secondary btn-outline-white">Grabar en archivo</button>
                 </div>
                 

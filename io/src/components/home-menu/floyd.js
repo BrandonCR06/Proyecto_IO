@@ -195,62 +195,40 @@ class FloydW extends React.Component{
         
     
     }  
-                      
+       
+    
+
+    setAddModalOpen = (flag)=>{
+        this.setState({modalOpen:flag})
+    }
+    des= (e) => {
+        this.setAddModalOpen(true);
+
+    }
     render(){            
         
         const data = this.floyd(this.props.matrix);
         const mat = data[0]
         const tablaP = data[1]
         this.updatePTable(tablaP);
-        console.log(this.state.tablaP)
+        //console.log(this.state.tablaP)
+        //this.setAddModalOpen(true);
+        //console.log(this.calcularRutaCorta(3,2))
+        
     
         return (
+            <div>
+            {desplegarTablas(mat)}                        
             
-            desplegarTablas(mat)
+            <button type = "button" class = "btn text-white bg-secondary" onClick={this.des}> Ruta mas corta para un par de nodos </button>
+            <FloydModal isOpen={this.state.modalOpen} onClose={() => this.setAddModalOpen(false)} tablaP = {this.state.tablaP} vertices={this.props.vertices}/>
+             </div>
         
 
         )
     }
 
-    calcularRutaCortaAux = (aca,alla,rutaCorta)=>{
-        rutaCorta += `, ${aca} --> ${alla}`;
-        if (TablaP[aca-1][alla-1] === 0){
-            return rutaCorta;
-        }
-        else{
-            this.calcularRutaCortaAux(TablaP[aca-1][alla-1],alla,rutaCorta);
-        }
-    }
-
-
-    calcularRutaCorta = (aca,alla)=>{
-        console.log(`Se desea ir de ${aca} hasta ${alla}`);
-        let rutaCorta = "";
-        let INF = "999";
-        
-        if (aca === alla){
-            rutaCorta = "Es el mismo lugar";
-        }
-        else{
-            if (TablaP[aca-1][alla-1] === 0){
-                rutaCorta += `Ruta directa ${aca} --> ${alla}`;
-            }
-            else{
-                if(TablaP[aca-1][alla-1] === INF){
-                    rutaCorta = "No hay ruta";
-                }
-                else{
-                    rutaCorta += `Ruta Corta: ${aca} --> ${TablaP[aca-1][alla-1]} `;
-                    rutaCorta = this.calcularRutaCortaAux(TablaP[aca-1][alla-1], alla,rutaCorta);
-                }
-            }
-        }
-        console.log(rutaCorta);
-    }
-
-    setAddModalOpen = (flag)=>{
-        this.modalOpen = flag;
-    }
+    
 }
 
 function desplegarTablas(datos){
@@ -458,10 +436,6 @@ function Floyd(){
 export  {Floyd,FloydW};
 
 
-/*
-<FloydModal
-    isOpen={this.modalOpen}
-    onClose={() => this.setAddModalOpen(true)}
-/>
 
-*/
+
+
