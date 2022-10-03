@@ -1,5 +1,5 @@
 import React from "react";
-import {FloydW} from './floyd.js';
+import {Floyd,FloydW} from './floyd.js';
 import fileSaver from "file-saver";
 
 
@@ -116,7 +116,7 @@ class App extends React.Component {
         if(matriz[i][j]===Number.MAX_SAFE_INTEGER){
             val = "∞"
         }
-        if (matriz[i][j] === 0) {
+        if (matriz[i][j] == 0) {
             return(
                 <div class='col'>
                     <h5 class='text-white'>De {lista[i]} → {lista[j]}</h5>
@@ -236,7 +236,7 @@ class App extends React.Component {
             if (this.state.listNodesName.length > 0) {
                 for (let index = 0; index < this.state.listNodesName.length; index++) {
                     const element = this.state.listNodesName[index];
-                    if (element !== undefined) {
+                    if (element != undefined) {
                         list[index-1] = element
                     }
                 }
@@ -272,12 +272,12 @@ class App extends React.Component {
                     
                     let valor = this.state.matriz[i][j]
 
-                    if (valor === Number.MAX_SAFE_INTEGER) {
+                    if (valor == Number.MAX_SAFE_INTEGER) {
                         valor = "inf"
                     }
 
 
-                    if (j === this.state.matriz.length-1) {
+                    if (j == this.state.matriz.length-1) {
                         string += valor
                     } 
                     
@@ -314,14 +314,14 @@ class App extends React.Component {
     render(){
 
     return(
-    <div  style ={{display:"inline"}} id = "1" className = "p-4 ms-auto">       
+    <div  style ={{display:"inline"}} id = "1"class = "p-4 ms-auto">       
                  
-        <div className="mb-3 cont">            
+        <div class="mb-3 cont">            
                         
-            <h4 className='text-white'>Ingresar la cantidad de nodos</h4>
-            <input  className=" form-control text-white bg-dark" type="number" id="formNodes" onChange={this.setd}></input>            
+            <h4 class='text-white'>Ingresar la cantidad de nodos</h4>
+            <input  class=" form-control text-white bg-dark" type="number" id="formNodes" onChange={this.setd}></input>            
             <br></br>
-            <button onClick={this.handleSummit} type="button" className="btn btn-secondary btn-block btn-outline-white">Confirmar</button>
+            <button onClick={this.handleSummit} type="button" class="btn btn-secondary btn-block btn-outline-white">Confirmar</button>
         </div>
         
         
@@ -338,9 +338,10 @@ class App extends React.Component {
         <div>
             {pesos(this.state.inputsPesos)}
             <br></br>
-            <div className="btn-toolbar">
-            <button onClick={this.handleFloyd} type="button" className="btn btn-secondary btn-outline-white">Generar algoritmo </button>
+            <div class="btn-toolbar">
+            <button onClick={this.handleFloyd} type="button" class="btn btn-secondary btn-outline-white">Generar algoritmo </button>
             <br></br>
+            
             
             </div>
         </div>
@@ -348,13 +349,17 @@ class App extends React.Component {
             <div id  ="pesos"></div>
           }
           
-          {this.state.floydBoolean?
+          {this.state.floydBoolean?                
                 <div>
+                    
+                    <br></br>
+                    <h2 className=' text-white'>Generado dinámicamente:</h2>            
                     <FloydW vertices = {this.state.vertices} matrix = {this.state.matriz}></FloydW>
                     <br></br>
-                    <button onClick={this.handleSaveFile} type="button" className="btn btn-secondary btn-outline-white">Grabar en archivo</button>
+                    <button onClick={this.handleSaveFile} type="button" class="btn btn-secondary btn-outline-white">Grabar en archivo</button>
+                    
                 </div>
-                
+            
                 
             :
             <div id  ="floyd"></div>}

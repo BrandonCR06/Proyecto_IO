@@ -412,12 +412,18 @@ class  App extends React.Component {
         <input  className=" form-control text-white bg-dark" type="file" id="formFile" onChange={this.setd}></input>
                    
         </div>
+        {console.log(FloydMenu().props)}
         {FloydMenu()}
         
                              
         
             {this.state.inputLinkClicked?           
-                <FloydW vertices = {this.state.vertices} matrix = {this.state.m}></FloydW> 
+                <div>
+                    <h2 className=' text-white'>Cargado de archivo:</h2>            
+                    <br></br>
+                    <FloydW vertices = {this.state.vertices} matrix = {this.state.m}></FloydW> 
+                    
+                </div>
               :
 
               <div></div>
