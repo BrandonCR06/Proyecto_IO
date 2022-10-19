@@ -16,9 +16,9 @@ function Home() {
           Rutas más cortas 
         </a>
         <li > </li>
-        <button type="button" class="btn btn-secondary btn-block btn-outline-white" data-toggle="tooltip" data-placement="bottom" title="Es un problema de optimización combinatoria, es decir, que busca la mejor solución entre un conjunto finito de posibles soluciones a un problema." onClick = {notAvailable}>
+        <a type="button" class="btn btn-secondary btn-block btn-outline-white" data-toggle="tooltip" data-placement="bottom" title="Es un problema de optimización combinatoria, es decir, que busca la mejor solución entre un conjunto finito de posibles soluciones a un problema." href = "/Knapsack">
           Problema de la mochila
-        </button>
+        </a>
         <li > </li>
         <button type="button" class="btn btn-secondary btn-block btn-outline-white" data-toggle="tooltip" data-placement="bottom" title="Es una decisión que involucra aspectos de carácter estratégico debido a que ella determina los niveles de operación, las necesidades de mantención y la capacidad productiva." onClick = {notAvailable}>
           Reemplazo de equipos
