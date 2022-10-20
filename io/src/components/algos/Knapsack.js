@@ -103,8 +103,9 @@ class KnapsackAlgo extends React.Component{
                 return(
                     <thead class="thead-light">
                     <tr>
-                    {row.map((col,j) => {                              
-                        return(                            
+                    {row.map((col,j) => {   
+                        
+                        return(                                           
                             col
                         )
                         
@@ -182,56 +183,7 @@ function TablaP(filas) {
         );
     
 }
-function Tabla(index,filas) {    
-    //cambiar el color
-         
-        return (                                                
-                        
-            
-            <div >
-            
-            <table class = "table-bordered table table-dark">
-            
-            {filas.map((row,i) => {  
-                return(
-                    <thead class="thead-light">
-                    <tr>
-                    {row.map((col,j) => {                              
-                        return(                    
-                                    
-                            filas[i][j]                                                                             
-                        )
-                        
-                        
-                    })}     
-                    </tr>           
-                    </thead>
-                )
-            })}            
-                
-            </table>            
-            </div>            
-        );
-    
-}
 
-function parseM(arr){
-    let m = new Array(arr.length);
-    for(let i = 0 ; i < arr.length; i++){
-        m[i] = new Array(arr.length);
-        for(let j = 0 ; j< arr.length; j++){
-            if(arr[i][j]==="inf"){
-                m[i][j] = Number.MAX_SAFE_INTEGER;
-            } else{
-                m[i][j] = Math.floor(arr[i][j]);
-            }
-            
-        }
-            
-    }
-    return m;
-
-}
 class  App extends React.Component {
     constructor(props) {
         super(props);
@@ -241,14 +193,15 @@ class  App extends React.Component {
             cantidadObjetos: 0 , 
             valores: [], 
             pesos: [] ,
-            vertices :[],
+            
             knapConfirmed: false
           }
       }
-     
-     
-    cambioValPes =(evt,list,i)=>{
+      cambioValPes =(evt,list,i)=>{
         let change = evt.target.value;
+        if(list ===[]){
+            list = new Array(this.state.cantidadObjetos);
+        }
         list[i]  = change;
         
         
@@ -258,6 +211,8 @@ class  App extends React.Component {
 
 
         }
+     
+    
       desplegarTablaInputs = ()=> {
         let listaDespliegue = []
         let listapes = []
@@ -290,7 +245,7 @@ class  App extends React.Component {
             </div>
         )
         }
-        
+       
         return (  
             <table class = "table-bordered table table-dark">
                 <thead class="thead-light">       
@@ -343,6 +298,7 @@ class  App extends React.Component {
         }
         
         console.log(this.state.capacidad)
+        
         this.setState({knapConfirmed:true});
 
 
@@ -352,13 +308,11 @@ class  App extends React.Component {
         
         let num = parseInt(e.target.value);
 
-        if(e.target.value!== ""&& !num  ){
         
-            window.alert("Error, debe ingresar un numero entero");
-            return;
-        }
         this.setState({knapConfirmed:false});
-        this.setState({cantidadObjetos: num, valores :new Array(num),pesos: new Array(num)});
+        
+        
+        this.setState({cantidadObjetos: num});
         
     }
    
@@ -386,7 +340,7 @@ class  App extends React.Component {
         <h1 className='text-center text-white'>Problema de la mochila</h1>            
         <div className="mb-3 cont">            
         <h4 className=' text-white'>Ingrese la cantidad de objetos</h4>            
-        <input  className=" form-control text-white bg-dark" type="text"  onChange={this.setd}></input>
+        <input  className=" form-control text-white bg-dark" type="number" onChange={this.setd}></input>
                    
         </div>
         {this.desplegarTablaInputs()}
@@ -397,7 +351,10 @@ class  App extends React.Component {
             <h4 className=' text-white'>Ingrese la capacidad máxima</h4>
             <input onChange={evt =>{this.setState({capacidad:parseInt(evt.target.value)})}} style = {{maxWidth:"10%"}}className="  form-control text-white bg-dark" type="text" ></input>
             <br></br>
-            <button onClick={this.confirmKnap} type="button" class="btn btn-secondary btn-block btn-outline-white">Generar Algoritmo</button>
+            <button onClick={this.confirmKnap} type="button" class="btn btn-secondary btn-block btn-outline-white">Generar Algoritmo</button>            
+            
+            <br></br>
+            <br></br>
         </div>
              :
                 <div/>
