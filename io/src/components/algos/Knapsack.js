@@ -12,14 +12,16 @@ class KnapsackAlgo extends React.Component{
         super(props);
         this.state = {
           pesos: [],
+          cantidades:[],
           valores :[],
           capacidad:[],
-          capacidades:[]
+          capacidades:[],
+          resultadoKnap:[]
         };
       }
       
 
-       bounded = (v, c, horas)=>{
+       bounded = (v, c, horas,Q)=>{
         
         let n = v.length
         let Tabla = new Array(horas+1);
@@ -42,40 +44,121 @@ class KnapsackAlgo extends React.Component{
             for (let j = 1 ; j < n+1 ;j ++){
                 j = j
                 let bg = ""
-                if(i-c[j-1] < 0  ){
-                    if(j-1>=0){
-                        A[i][j] = A[i][j-1]
-                        //marcar con rojo
-                        
+                let val = 0
+                let r = []
+                let kElegidos = []
+                for (let k = 1; k < Q[j-1]+1;k++){
+                    if(i-k*c[j-1] < 0  ){
+                        if(j-1>=0){
+                            val = A[i][j-1]
+                            //marcar con rojo
+                            
 
-                    }else{
-            
-                        A[i][j] = 0
-                        //marcar con rojo
+                        }else{
+                
+                            val = 0
+                            //marcar con rojo
+                        }
+                        bg = "bg-danger"
+                    }else {
+                        
+                        val  = Math.max(A[i][j-1],k*v[j-1]+A[i-k*c[j-1]][j-1])
                     }
-                    bg = "bg-danger"
-                }else {
+                    r.push(val);
+                    kElegidos.push(k);
                     
-                    A[i][j]  = Math.max(A[i][j-1],v[j-1]+A[i-c[j-1]][j-1])
-                }
+                }   
+                A[i][j] = Math.max(...r);
+                let elegido = kElegidos[r.indexOf(Math.max(...r))];
+                
                 if(A[i][j]!= A[i][j-1]){
                     bg = "bg-success"
                 } else {bg = "bg-danger";}
-                Tabla[i][j]=  Columns(bg, A[i][j]);
-                
+                if(bg==="bg-danger"){elegido = 0;}
+                if(A[i][j]===0){elegido = " "}
+                Tabla[i][j]=  Columns(bg, A[i][j],elegido,j); 
             }
 
                 //if(A[i][j]!= A[i][j-1]):
         
          }
                     //marcar con verde
-        console.log(Tabla);
-        console.log(A);
+        
+        
+        
+        
         
 
             
-        return Tabla;
+        return [Tabla,A];
     }
+
+    
+     unboundedDetails=(t, objetos,Z, weights, cantObjetosMax) =>{
+    
+    
+        let i = t.length-1
+        let j = t[0].length-1
+        let resultado = [];
+        resultado.push(<h2 class  ="text-white">Resultado: <br/></h2>)
+        while (objetos.length !== 0) {
+            if (t[i][j] === t[i][j-1]) {
+                resultado.push(<h3  class  ="text-white">{"El "+ String(objetos[objetos.length-1]) + " no se seleccionó\n"}<br/></h3>)
+                objetos.pop(objetos.length-1)
+                j = j-1
+            }
+    
+            else {
+                let contador = 1
+                let bandera = true
+                let peso = weights[objetos.length-1]
+                i = i - peso
+                while (bandera) {
+                    if (contador === cantObjetosMax[objetos.length-1]) {
+                        bandera = false
+                        
+                    }else if (t[i][j-1] < t[i][j] ) {
+                        
+                        contador+=1            
+                        i = i - peso
+                    }
+                    else {
+                        bandera = false                
+                    }
+         
+                }
+                let va1 = "Se seleccionó"
+                if(contador>1){
+                    va1 = "Se seleccionaron"
+                }
+                resultado.push(<h3 class  ="text-white">{va1+": "+String(contador)+" "+String(objetos[objetos.length - 1])+"\n"}<br/></h3>)
+                //console.log("Se selecciono: "+String(contador)+" "+String(objetos[objetos.length - 1]))
+                
+                objetos.pop(objetos.length-1)
+                //i = contador * peso-1
+                j = j - 1
+                
+            }
+            
+        }
+        //console.log(t)
+        resultado.push(<h3 class  ="text-white">Valor máximo obtenido:{Z} <br/></h3>)
+        return resultado
+        
+        
+    }
+     /**
+    let W = 12;
+    let val = [6, 15, 7, 9];
+    let wt = [4, 6, 2, 5];
+    let n = val.length;
+    let objetos = ["Obj1", "Obj2", "Obj3", "Obj4"]
+    cantObjetosMax = [3,3,3,3]
+    
+    
+    
+     */
+    
 
         
      
@@ -88,18 +171,42 @@ class KnapsackAlgo extends React.Component{
    
     render(){            
         
-     console.log(this.props.valores,this.props.pesos,this.props.capacidad);
      
-        
     
+     //console.log(objetos)
+    let data = this.bounded(this.props.pesos,this.props.valores,this.props.capacidad,this.props.cantidades);
+    let TablaMap = data[0]
+    let knapRes = data[1]
+    
+    //let W = 12;
+    //let val = [6, 15, 7, 9];
+    //let wt = [4, 6, 2, 5];
+    //let n = val.length;
+    
+    //let objetos = ["Obj1", "Obj2", "Obj3", "Obj4"]
+    let cantObjetosMax = []
+    let objetos = []
+    let pesos = []
+    for(let i = 0 ; i < this.props.valores.length; i++){
+        objetos.push("Objeto"+(i+1));
+        cantObjetosMax.push(this.props.cantidades[i]);
+        pesos.push(this.props.valores[i]);
+
+     }
+    
+    
+    
+    let res =this.unboundedDetails(knapRes,  objetos,knapRes[this.props.capacidad][this.props.valores.length], pesos,cantObjetosMax);
+    console.log(res)
+    //console.log(this.unboundedDetails(knapRes, 36, objetos, wt, val, cantObjetosMax))
     //{this.bounded(this.props.pesos,this.props.valores,this.props.capacidad).map((row,i) =>{
         return (
             <div>
                                   
             
              <table class = "table-bordered table table-dark">
-            
-            {this.bounded(this.props.pesos,this.props.valores,this.props.capacidad).map((row,i) => {  
+             
+            {TablaMap.map((row,i) => {  
                 return(
                     <thead class="thead-light">
                     <tr>
@@ -116,6 +223,10 @@ class KnapsackAlgo extends React.Component{
                 )
             })}            
             </table>
+
+            <br></br>
+            
+            {res}
                 
           
              </div>
@@ -127,61 +238,39 @@ class KnapsackAlgo extends React.Component{
     
 }
 
-function desplegarTablas(datos){
-    return(
-        <div>                             
-             {datos.map(dato => {                                  
-                
-                return (                    
-                    dato
-                )
-                    
-                })}                       
-
-              
-        </div>
-    )
-
-}
 
 
 
-function Columns(bg,col){
+function Columns(bg,col,elegido,i){
+    let valueDis="";
+    let valueDis2="";
+    let valueDis3="";
+    if(elegido!==" "){
+        valueDis=", x";
+        valueDis2=i;
+        valueDis3 = " = "+elegido
+    } 
     
-    return (        
-        <td class = {bg+" wid"} scope="col">{col}</td>
-    )
-}
-function TablaP(filas) {    
-    //cambiar el color
-         
-        return (                                                
-                        
-            
-            <div >
-            <h3 class = "text-white font-12">{"Tabla P"}</h3>
-            <table class = "table-bordered table table-dark">
-            
-            {filas.map((row,i) => {  
-                return(
-                    <thead class="thead-light">
-                    <tr>
-                    {row.map((col,j) => {                              
-                        return(                            
-                            filas[i][j]                                                                             
-                        )
-                        
-                        
-                    })}     
-                    </tr>           
-                    </thead>
-                )
-            })}            
-                
-            </table>            
-            </div>            
-        );
     
+
+    
+    return (            
+        
+        <td class = {bg+" wid"} scope="col">
+            <p >{col}  <small style={{display:"inline",fontSize:"14px"}} >{valueDis}</small><small style={{display:"inline",fontSize:"9px"}}>{valueDis2}</small><small style={{display:"inline",fontSize:"14px"}} >{valueDis3}</small></p>
+            
+            
+            
+            
+            
+        </td>
+        
+        
+        
+        
+        
+        
+    )
 }
 
 class  App extends React.Component {
@@ -193,6 +282,7 @@ class  App extends React.Component {
             cantidadObjetos: 0 , 
             valores: [], 
             pesos: [] ,
+            cantidades: [] ,
             
             knapConfirmed: false
           }
@@ -202,6 +292,8 @@ class  App extends React.Component {
         if(list ===[]){
             list = new Array(this.state.cantidadObjetos);
         }
+        
+        
         list[i]  = change;
         
         
@@ -231,7 +323,7 @@ class  App extends React.Component {
                 </input>            
             </div>
             )
-            listapes.push(
+            listapes.push([
                 <div class='col'>
                  
         
@@ -242,7 +334,19 @@ class  App extends React.Component {
                 onChange = {evt => this.cambioValPes(evt,this.state.pesos, i)}
                 >                            
                 </input>            
-            </div>
+            </div>, 
+
+            <div class='col'>
+                 
+        
+                 <input                      
+               className="input"                        
+                 type={"text"}
+               defaultValue = {0}
+               onChange = {evt => this.cambioValPes(evt,this.state.cantidades, i)}
+               >                            
+               </input>            
+           </div>]
         )
         }
        
@@ -253,7 +357,8 @@ class  App extends React.Component {
                 <tr>
                 <th scope="col"> </th>
                 <th scope="col">Valor</th>
-                <th scope="col">Peso</th>
+                <th scope="col">Costo</th>
+                <th scope="col">Cantidad disponible</th>
                 
                 </tr>:
                 <div/>
@@ -265,8 +370,10 @@ class  App extends React.Component {
                             <tr>
 
                             <th scope="row">Objeto {i+1}</th>
-                             <td> {listapes[i]}</td>
+                             <td> {listapes[i][0]}</td>
+                             
                              <td>     {row}</td>
+                             <td> {listapes[i][1]}</td>
                             
                             
                                
@@ -295,6 +402,7 @@ class  App extends React.Component {
         for(let i = 0 ; i < this.state.pesos.length; i++){
             this.state.pesos[i] = parseInt(this.state.pesos[i])
             this.state.valores[i] = parseInt(this.state.valores[i])
+            this.state.cantidades[i] = parseInt(this.state.cantidades[i])
         }
         
         console.log(this.state.capacidad)
@@ -362,7 +470,7 @@ class  App extends React.Component {
         
         
         {this.state.knapConfirmed ?
-            <KnapsackAlgo valores = {this.state.valores} capacidad = {this.state.capacidad} pesos = {this.state.pesos}/>
+            <KnapsackAlgo valores = {this.state.valores} cantidades = {this.state.cantidades}capacidad = {this.state.capacidad} pesos = {this.state.pesos}/>
             :
         <div/>
         }
