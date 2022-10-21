@@ -25,8 +25,11 @@ class KnapsackAlgo extends React.Component{
        bounded = (v, c, horas,Q)=>{
         
         let n = v.length
-        let Tabla = new Array(horas+1);
+        
+        let Tabla = new Array(horas+2);
         let A = new Array(horas+1);
+        
+        
         for (let k = 0 ; k < horas+1; k++){
             let col = new Array(n+1);
             let colk = new Array(n+1);
@@ -38,6 +41,8 @@ class KnapsackAlgo extends React.Component{
             Tabla[k] = colk
             A[k] = col;
         }
+        
+        
         
         
         for (let i = 0; i < horas+1; i++){
@@ -102,6 +107,7 @@ class KnapsackAlgo extends React.Component{
         let j = t[0].length-1
         let resultado = [];
         let res2 = [];
+
         
         while (objetos.length !== 0) {
             if (t[i][j] === t[i][j-1]) {
@@ -117,7 +123,7 @@ class KnapsackAlgo extends React.Component{
                 let peso = weights[objetos.length-1]
                 i = i - peso
                 while (bandera) {
-                    if (contador === cantObjetosMax[objetos.length-1]) {
+                    if (contador === cantObjetosMax[objetos.length-1]-1) {
                         bandera = false
                         
                     }else if (t[i][j-1] < t[i][j] ) {
@@ -136,7 +142,7 @@ class KnapsackAlgo extends React.Component{
                 }
                 resultado.push(<h3 class  ="text-white">{va1+": "+String(contador)+" "+String(objetos[objetos.length - 1])+"\n"}<br/></h3>)
                 //console.log("Se selecciono: "+String(contador)+" "+String(objetos[objetos.length - 1]))
-                res2.push(contador);
+                res2.push(contador);    
                 objetos.pop(objetos.length-1)
                 //i = contador * peso-1
                 j = j - 1
@@ -203,7 +209,7 @@ class KnapsackAlgo extends React.Component{
     let resDet =this.unboundedDetails(knapRes,  objetos,knapRes[this.props.capacidad][this.props.valores.length], pesos,cantObjetosMax);
     let res = resDet[0];
     let selectedObjects = resDet[1].reverse();
-    //console.log(this.unboundedDetails(knapRes, 36, objetos, wt, val, cantObjetosMax))
+    
     //{this.bounded(this.props.pesos,this.props.valores,this.props.capacidad).map((row,i) =>{
         return (
             <div>
@@ -418,7 +424,8 @@ class  App extends React.Component {
                   <input                     
                 className="input"                        
                   type={"text"}
-                defaultValue = {0}
+                
+                
                 onChange = {evt => this.cambioValPes(evt,this.state.valores, i)}
                 
                 >                            
@@ -432,7 +439,7 @@ class  App extends React.Component {
                   <input                      
                 className="input"                        
                   type={"text"}
-                defaultValue = {0}
+                
                 onChange = {evt => this.cambioValPes(evt,this.state.pesos, i)}
                 >                            
                 </input>            
@@ -444,7 +451,7 @@ class  App extends React.Component {
                  <input                      
                className="input"                        
                  type={"text"}
-               defaultValue = {0}
+               
                onChange = {evt => this.cambioValPes(evt,this.state.cantidades, i)}
                >                            
                </input>            
