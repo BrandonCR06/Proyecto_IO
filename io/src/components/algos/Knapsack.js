@@ -1,7 +1,6 @@
 import '../../App.css';
 import React from 'react';
-import KnapsackMenu from '../home-menu/floydMenu';
-import FloydModal from '../../components/FloydModal';
+
 
 
 
@@ -102,11 +101,13 @@ class KnapsackAlgo extends React.Component{
         let i = t.length-1
         let j = t[0].length-1
         let resultado = [];
-        resultado.push(<h2 class  ="text-white">Resultado: <br/></h2>)
+        let res2 = [];
+        
         while (objetos.length !== 0) {
             if (t[i][j] === t[i][j-1]) {
                 resultado.push(<h3  class  ="text-white">{"El "+ String(objetos[objetos.length-1]) + " no se seleccionó\n"}<br/></h3>)
                 objetos.pop(objetos.length-1)
+                res2.push(0);
                 j = j-1
             }
     
@@ -135,7 +136,7 @@ class KnapsackAlgo extends React.Component{
                 }
                 resultado.push(<h3 class  ="text-white">{va1+": "+String(contador)+" "+String(objetos[objetos.length - 1])+"\n"}<br/></h3>)
                 //console.log("Se selecciono: "+String(contador)+" "+String(objetos[objetos.length - 1]))
-                
+                res2.push(contador);
                 objetos.pop(objetos.length-1)
                 //i = contador * peso-1
                 j = j - 1
@@ -144,8 +145,9 @@ class KnapsackAlgo extends React.Component{
             
         }
         //console.log(t)
+        resultado.reverse();
         resultado.push(<h3 class  ="text-white">Valor máximo obtenido:{Z} <br/></h3>)
-        return resultado
+        return [resultado,res2];
         
         
     }
@@ -198,8 +200,9 @@ class KnapsackAlgo extends React.Component{
     
     
     
-    let res =this.unboundedDetails(knapRes,  objetos,knapRes[this.props.capacidad][this.props.valores.length], pesos,cantObjetosMax);
-    console.log(res)
+    let resDet =this.unboundedDetails(knapRes,  objetos,knapRes[this.props.capacidad][this.props.valores.length], pesos,cantObjetosMax);
+    let res = resDet[0];
+    let selectedObjects = resDet[1].reverse();
     //console.log(this.unboundedDetails(knapRes, 36, objetos, wt, val, cantObjetosMax))
     //{this.bounded(this.props.pesos,this.props.valores,this.props.capacidad).map((row,i) =>{
         return (
@@ -227,9 +230,10 @@ class KnapsackAlgo extends React.Component{
             </table>
 
             <br></br>
-            
+            {resultParseMath(selectedObjects)}
+            <h2 class  ="text-white">Esto indica que: <br/></h2>
             {res}
-                
+            
           
              </div>
         
@@ -240,7 +244,26 @@ class KnapsackAlgo extends React.Component{
     
 }
 
-
+function resultParseMath(selectedObjects){
+    let resultado = [];
+    resultado.push(<br></br>)
+    resultado.push(<h2 className='text-white'>Resultado: </h2>)
+    
+    
+    for (let index = 0; index < selectedObjects.length; index++) {
+        if (index === selectedObjects.length-1) {
+            resultado.push(<h4  style={{display:"inline"}}className='text-white'><small style={{display:"inline",fontSize:"14px"}} >{"obj"+(index+1)}</small>{"="+selectedObjects[index]}</h4>)
+            resultado.push(<br></br>)
+        } else {
+            resultado.push(<h4 style={{display:"inline"}}className='text-white'><small style={{display:"inline",fontSize:"14px"}} >{"obj"+(index+1)}</small> {"="+selectedObjects[index]}</h4>)
+            resultado.push(<br></br>)
+        }
+    }
+    resultado.push(<br></br>)
+    return (
+        resultado
+    )
+}
 
 function generateZ(valores) {
 
@@ -250,10 +273,10 @@ function generateZ(valores) {
     for (let index = 0; index < valores.length; index++) {
         
         if (index === valores.length-1) {
-            resultado.push(<h4  style={{display:"inline"}}className='text-white'>{valores[index]}<small style={{display:"inline",fontSize:"14px"}} >{"obj_"+(index+1)}</small></h4>)
+            resultado.push(<h4  style={{display:"inline"}}className='text-white'>{valores[index]}<small style={{display:"inline",fontSize:"14px"}} >{"obj"+(index+1)}</small></h4>)
             
         } else {
-            resultado.push(<h4 style={{display:"inline"}}className='text-white'>{valores[index]}<small style={{display:"inline",fontSize:"14px"}} >{"obj_"+(index+1)}</small>+</h4>)
+            resultado.push(<h4 style={{display:"inline"}}className='text-white'>{valores[index]}<small style={{display:"inline",fontSize:"14px"}} >{"obj"+(index+1)}</small>+</h4>)
         }
         
     }
@@ -264,21 +287,31 @@ function generateZ(valores) {
 
 }
 
-function subjectTO(pesos, capacidadMaxima) {
+function subjectTO(pesos, capacidadMaxima,capacidades) {
     let resultado = [];
     for (let index = 0; index < pesos.length; index++) {
         
         if (index === pesos.length-1) {
-            resultado.push(<h4  style={{display:"inline"}}className='text-white'>{pesos[index]}<small style={{display:"inline",fontSize:"14px"}} >{"obj_"+(index+1)}</small></h4>)
+            resultado.push(<h4  style={{display:"inline"}}className='text-white'>{pesos[index]}<small style={{display:"inline",fontSize:"14px"}} >{"obj"+(index+1)}</small></h4>)
             
         } else {
-            resultado.push(<h4 style={{display:"inline"}}className='text-white'>{pesos[index]}<small style={{display:"inline",fontSize:"14px"}} >{"obj_"+(index+1)}</small>+</h4>)
+            resultado.push(<h4 style={{display:"inline"}}className='text-white'>{pesos[index]}<small style={{display:"inline",fontSize:"14px"}} >{"obj"+(index+1)}</small>+</h4>)
         }
         
     }
-    resultado.push(resultado.push(<h4 style={{display:"inline"}}className='text-white'>{" ≤ "+capacidadMaxima}</h4>))
+    resultado.push(<h4 style={{display:"inline"}}className='text-white'>{" ≤ "+capacidadMaxima}</h4>)
     resultado.push(<br></br>)
-    resultado.push(<h4 style={{display:"inline"}}className='text-white'><small style={{display:"inline",fontSize:"14px"}} >obj_i</small></h4>)
+    
+    for (let index = 0; index < capacidades.length; index++) {
+        if (index === capacidades.length-1) {
+            resultado.push(<h4  style={{display:"inline"}}className='text-white'><small style={{display:"inline",fontSize:"14px"}} >{"obj"+(index+1)}</small>{"≤"+capacidades[index]}</h4>)
+            resultado.push(<br></br>)
+        } else {
+            resultado.push(<h4 style={{display:"inline"}}className='text-white'><small style={{display:"inline",fontSize:"14px"}} >{"obj"+(index+1)}</small> {"≤"+capacidades[index]}</h4>)
+            resultado.push(<br></br>)
+        }
+    }
+    resultado.push(<h4 style={{display:"inline"}}className='text-white'><small style={{display:"inline",fontSize:"14px"}} >obji</small></h4>)
     resultado.push(<h4 style={{display:"inline"}}className='text-white'> ≥ 0</h4>)
     resultado.push(<br></br>)
     return (
@@ -288,7 +321,7 @@ function subjectTO(pesos, capacidadMaxima) {
 }
 
 
-function mathematicExpression(valores, pesos, capacidad) {
+function mathematicExpression(valores, pesos, capacidad,capacidades) {
 
 
 
@@ -298,7 +331,7 @@ function mathematicExpression(valores, pesos, capacidad) {
         {generateZ(valores)}
         <br></br>
         <h4 className='text-white'>Sujeto a:</h4>
-        {subjectTO(pesos, capacidad)}
+        {subjectTO(pesos, capacidad,capacidades)}
         <br></br>
         </div>
     )
@@ -315,7 +348,7 @@ function Columns(bg,col,elegido,i){
     let valueDis2="";
     let valueDis3="";
     if(elegido!==" "){
-        valueDis=", x";
+        valueDis=", obj";
         valueDis2=i;
         valueDis3 = " = "+elegido
     } 
@@ -540,7 +573,7 @@ class  App extends React.Component {
         
         {this.state.knapConfirmed ?
             <div>
-            {mathematicExpression(this.state.pesos, this.state.valores, this.state.capacidad)}
+            {mathematicExpression(this.state.pesos, this.state.valores, this.state.capacidad,this.state.cantidades)}
             <KnapsackAlgo valores = {this.state.valores} cantidades = {this.state.cantidades}capacidad = {this.state.capacidad} pesos = {this.state.pesos}/>
             </div>
             :
