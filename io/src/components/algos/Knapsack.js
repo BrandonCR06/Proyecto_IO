@@ -123,7 +123,7 @@ class KnapsackAlgo extends React.Component{
                 let peso = weights[objetos.length-1]
                 i = i - peso
                 while (bandera) {
-                    if (contador === cantObjetosMax[objetos.length-1]-1) {
+                    if (contador >=cantObjetosMax[objetos.length-1]-1) {
                         bandera = false
                         
                     }else if (t[i][j-1] < t[i][j] ) {
