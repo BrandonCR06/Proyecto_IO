@@ -21,6 +21,8 @@ class KnapsackAlgo extends React.Component{
       }
       
 
+
+
        bounded = (v, c, horas,Q)=>{
         
         let n = v.length
@@ -237,6 +239,73 @@ class KnapsackAlgo extends React.Component{
 
     
 }
+
+
+
+function generateZ(valores) {
+
+    let resultado = [];
+    resultado.push(<h4 style={{display:"inline"}} class  ="text-white">Z = </h4>)
+    //let string = "Z = "
+    for (let index = 0; index < valores.length; index++) {
+        
+        if (index === valores.length-1) {
+            resultado.push(<h4  style={{display:"inline"}}className='text-white'>{valores[index]}<small style={{display:"inline",fontSize:"14px"}} >{"obj_"+(index+1)}</small></h4>)
+            
+        } else {
+            resultado.push(<h4 style={{display:"inline"}}className='text-white'>{valores[index]}<small style={{display:"inline",fontSize:"14px"}} >{"obj_"+(index+1)}</small>+</h4>)
+        }
+        
+    }
+    resultado.push(<br></br>)
+    return (
+        resultado
+    )
+
+}
+
+function subjectTO(pesos, capacidadMaxima) {
+    let resultado = [];
+    for (let index = 0; index < pesos.length; index++) {
+        
+        if (index === pesos.length-1) {
+            resultado.push(<h4  style={{display:"inline"}}className='text-white'>{pesos[index]}<small style={{display:"inline",fontSize:"14px"}} >{"obj_"+(index+1)}</small></h4>)
+            
+        } else {
+            resultado.push(<h4 style={{display:"inline"}}className='text-white'>{pesos[index]}<small style={{display:"inline",fontSize:"14px"}} >{"obj_"+(index+1)}</small>+</h4>)
+        }
+        
+    }
+    resultado.push(resultado.push(<h4 style={{display:"inline"}}className='text-white'>{" ≤ "+capacidadMaxima}</h4>))
+    resultado.push(<br></br>)
+    resultado.push(<h4 style={{display:"inline"}}className='text-white'><small style={{display:"inline",fontSize:"14px"}} >obj_i</small></h4>)
+    resultado.push(<h4 style={{display:"inline"}}className='text-white'> ≥ 0</h4>)
+    resultado.push(<br></br>)
+    return (
+        resultado
+    )
+
+}
+
+
+function mathematicExpression(valores, pesos, capacidad) {
+
+
+
+    return (
+        <div>
+        <h4 className='text-white'>Maximizar:</h4>
+        {generateZ(valores)}
+        <br></br>
+        <h4 className='text-white'>Sujeto a:</h4>
+        {subjectTO(pesos, capacidad)}
+        <br></br>
+        </div>
+    )
+
+}
+
+
 
 
 
@@ -470,7 +539,10 @@ class  App extends React.Component {
         
         
         {this.state.knapConfirmed ?
+            <div>
+            {mathematicExpression(this.state.pesos, this.state.valores, this.state.capacidad)}
             <KnapsackAlgo valores = {this.state.valores} cantidades = {this.state.cantidades}capacidad = {this.state.capacidad} pesos = {this.state.pesos}/>
+            </div>
             :
         <div/>
         }
