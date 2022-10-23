@@ -123,7 +123,7 @@ class KnapsackAlgo extends React.Component{
                 let peso = weights[objetos.length-1]
                 i = i - peso
                 while (bandera) {
-                    if (contador >=cantObjetosMax[objetos.length-1]-1) {
+                    if (contador >=cantObjetosMax[objetos.length-1]) {
                         bandera = false
                         
                     }else if (t[i][j-1] < t[i][j] ) {
@@ -519,7 +519,31 @@ class  App extends React.Component {
         this.setState({knapConfirmed:true});
 
 
+
       } 
+
+      setArray = (num)=>{
+        
+        let comparator = 0;
+        if(this.state.cantidadObjetos<num){
+            comparator = this.state.cantidadObjetos+1;
+        } else {
+            comparator = this.state.cantidadObjetos-1;
+        }
+        console.log("length"+this.state.cantidades.length ,"cant"+num, "state"+comparator)
+        if(num>=0){
+            while(this.state.cantidades.length >comparator){
+                this.state.cantidades.pop()
+                this.state.pesos.pop()
+                this.state.valores.pop()
+                
+                
+                
+            }
+          
+            
+        }    
+      }
        setd = (e)=>{
         
         
@@ -527,9 +551,11 @@ class  App extends React.Component {
 
         
         this.setState({knapConfirmed:false});
+        this.setState({cantidadObjetos:num});
         
         
-        this.setState({cantidadObjetos: num});
+        
+        this.setArray(num);
         
     }
    
