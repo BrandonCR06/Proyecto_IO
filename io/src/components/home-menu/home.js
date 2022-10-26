@@ -20,9 +20,9 @@ function Home() {
           Problema de la mochila
         </a>
         <li > </li>
-        <button type="button" class="btn btn-secondary btn-block btn-outline-white" data-toggle="tooltip" data-placement="bottom" title="Es una decisión que involucra aspectos de carácter estratégico debido a que ella determina los niveles de operación, las necesidades de mantención y la capacidad productiva." onClick = {notAvailable}>
+        <a href = "/Equipo" type="button" class="btn btn-secondary btn-block btn-outline-white" data-toggle="tooltip" data-placement="bottom" title="Es una decisión que involucra aspectos de carácter estratégico debido a que ella determina los niveles de operación, las necesidades de mantención y la capacidad productiva.">
           Reemplazo de equipos
-        </button>
+        </a>
         <li > </li>
         <button type="button" class="btn btn-secondary btn-block btn-outline-white" data-toggle="tooltip" data-placement="bottom" title="Es un tipo particular de árbol binario que presenta una estructura de datos en forma de árbol usada para tomar desiciones de la mejor forma posible" onClick = {notAvailable}>
           Árboles Binarios de Búsqueda Óptimos

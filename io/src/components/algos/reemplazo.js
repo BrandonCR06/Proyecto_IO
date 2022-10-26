@@ -152,11 +152,11 @@ class EquipoAlgo extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
-          reventa: [400,300,250],
-          mantenimiento:[30,40,60],
-          ganacia :[],
-          cantAnnios:5,
-          precio:500,
+          reventa: this.props.reventa,
+          mantenimiento: this.props.mantenimiento,
+          ganacia : this.props.ganacia,
+          cantAnnios: this.props.cantAnnios,
+          precio: this.props.precio,
           parametro1:[],
           resultadoEquipo:[]
         };
@@ -383,6 +383,7 @@ class  App extends React.Component {
           reventa: [],
           mantenimiento:[],
           ganacia :[],
+          vidaUtil: 1,
           equipoConfirmed: false
         };
       }
@@ -395,13 +396,13 @@ class  App extends React.Component {
             
         let num = parseInt(e.target.value);
         this.setState({equipoConfirmed:false});
-        this.setState({cantAnnios: num});
+        this.setState({vidaUtil: num});
     }
 
     cambioValores =(evt,list,i)=>{
         let change = evt.target.value;
         if(list ===[]){
-            list = new Array(this.state.cantAnnios);
+            list = new Array(this.state.vidaUtil);
         }
         list[i]  = change;
     }
@@ -409,14 +410,14 @@ class  App extends React.Component {
     desplegarTablaInputs = ()=> {
         let listaDespliegue = []
         let listapes = []
-        for(let i = 0 ; i < this.state.cantAnnios ; i++){
+        for(let i = 0 ; i < this.state.vidaUtil ; i++){
             listaDespliegue.push(
                 <div className = 'col'>
                   <input                     
                 className="input"                        
                   type={"text"}
                 defaultValue = {0}
-                onChange = {evt => this.cambioValores(evt,this.state.reventa, i)}
+                onChange = {evt => this.cambioValores(evt,this.state.mantenimiento, i)}
                 
                 >                            
                 </input>            
@@ -428,10 +429,10 @@ class  App extends React.Component {
                 className="input"                        
                   type={"text"}
                 defaultValue = {0}
-                onChange = {evt => this.cambioValores(evt,this.state.mantenimiento, i)}
+                onChange = {evt => this.cambioValores(evt,this.state.reventa, i)}
                 >                            
                 </input>            
-            </div>, 
+            </div>,
 
             <div className = 'col'>
                  <input                      
@@ -449,11 +450,11 @@ class  App extends React.Component {
         return (  
             <table className =  "table-bordered table table-dark">
                 <thead className = "thead-light">       
-                {this.state.cantAnnios>0 ?
+                {this.state.vidaUtil>0 ?
                 <tr>
                 <th scope="col"> </th>
                 <th scope="col">Precio de reventa</th>
-                <th scope="col">Costo del mantanimiento</th>
+                <th scope="col">Costo del mantenimiento</th>
                 <th scope="col">Ganancia recibida por año</th>
                 
                 </tr>:
@@ -504,9 +505,9 @@ class  App extends React.Component {
                     <h4 className=' text-white'>Ingrese el costo inicial del equipo</h4>         
                     <input onChange={evt =>{this.setState({precio:parseInt(evt.target.value)})}} className='form-control text-white bg-dark' type="text"></input><br/>
                     <h4 className=' text-white'>Seleccione la vida util del proyecto</h4>            
-                    <input  defaultValue="1" className=" form-control text-white bg-dark" type="number" min="1" max="10"></input><br/>
+                    <input  onChange={this.setd} defaultValue="1" className=" form-control text-white bg-dark" type="number" min="1" max="10"></input><br/>
                     <h4 className=' text-white'>Seleccione el plazo del proyecto</h4>  
-                    <input  onChange={this.setd} defaultValue="1" className=" form-control text-white bg-dark" type="number" min="1" max="30" ></input>
+                    <input onChange={evt =>{this.setState({cantAnnios:parseInt(evt.target.value)})}} defaultValue="1" className=" form-control text-white bg-dark" type="number" min="1" max="30" ></input>
                 </div>
                 <div>,
                     {this.desplegarTablaInputs()}
@@ -520,7 +521,7 @@ class  App extends React.Component {
                 <div/>
             {this.state.equipoConfirmed ?
                 <div>
-                <EquipoAlgo reventa = {this.state.reventa} mantenimiento = {this.state.mantenimiento} precio = {this.state.precio} cantAnnios = {this.state.cantAnnios} ganacia = {this.state.ganacia}/>
+                <EquipoAlgo reventa = {this.state.reventa} mantenimiento = {this.state.mantenimiento} precio = {this.state.precio} cantAnnios = {this.state.cantAnnios} ganacia = {this.state.ganacia} vidaUtil = {this.state.vidaUtil}/>
             </div>
             :
             <div></div>
