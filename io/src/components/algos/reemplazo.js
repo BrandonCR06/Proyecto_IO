@@ -1,152 +1,38 @@
 import '../../App.css';
 import React from 'react';
 
-/*
-function G(c, x, t, n, lista, listaIndices) {
-	let l = []
-	let kpos = []
-    if (x===n) {
-        console.log("G(",x,")=0")
-        return 0;
-    }
-    
-    for (let i = x+1; i<t+1; i++) {
-  	    let val = t
-        if (t<n) {
-    	    val = t+1
-        }
-        let func = 0
-        if (lista[n-i]===0) {
-    	    func = G(c,i,val,n,lista,listaIndices)
-            lista[n-i] = func
-        } else {
-    	    func = lista[n-i]
-        }
+function planReemplazo(lista,listatemp,i,planes,plan){
+    let planesa = new Array(1);
+    planReemplazoAux(lista,listatemp,i,planesa,plan);
+    console.log(planesa)
 
-        l.push((c[i-x-1] + func))
-        kpos.push(i)    
+}
+ function planReemplazoAux(lista,listatemp,i,planes,plan){
+    console.log("AAAA")
+    console.log(lista,listatemp,plan,planes)
+    if(listatemp==[]){
+        console.log(plan)
+        return [plan]
     }
 
-    console.log("G(",x,")=", Math.min(...l))
-    let r = []
-    let minin = Math.min(...l)
-    console.log(kpos)
-
-    let largo = count(l,Math.min(...l))
-    // COGER LOS POSIBLES MINIMOS
-    console.log(largo)
-    console.log(l)
-    for (let i = 0; i<largo; i++) {
         
-        console.log("INDEX =>>>>"+ l.indexOf(Math.min(...l)))
-
-        let v = kpos[l.indexOf(Math.min(...l))]
-        console.log("KPOS->"+kpos)
-        console.log("v->"+v)
-        r.push(v)
-        console.log("antes->"+t)
-        l.splice(l.indexOf(Math.min(...l)),1) 
-        //l = l.filter(e => e !== Math.min(...l))
-        console.log("despues->"+l)
-        //kpos = kpos.filter(e => e !== v)
-        kpos.splice(kpos.indexOf(v),1) 
+    let befPlan = new Array(plan.length);
+    for(let k = 0; k < plan.length; k++){
+        befPlan[k] = plan[k]
     }
-
-    listaIndices.push(r)
-    return minin
-}
-
-
-
-function index(lista, element) {
-    for (let index = 0; index < lista.length; index++) {
-        if (lista[index] === element) {
-            return index+1
-        }
+    let l  = []
+    for( let j = 0 ; j < listatemp.length;j++){
+        plan.push(listatemp[j]);
+        
+        let res  = planReemplazoAux(lista,lista[listatemp[j]],i+1,planes,plan)
+        
+            l.push(res)
+            
+        
+        plan = befPlan
     }
-}
-
-
-function count(lista, element) {
-    let count = 0
-    for (let i = 0; i<lista.length; i++) {
-        if (lista[i] === element) {
-            count = count+1
-        }
-    }
-    
-    return count
-}
-
-
-function generarLista(n) {
-	
-  let lista = []
-  for (let i = 0; i<n; i++) {
-  	lista.push(0)
-  }
-	return lista
-}
-
-
-function reemplazoEquipos(m, precio, siguientesN) {
-    
-    let sumMant
-    let listDif = []
-
-    if (!Number.isInteger(m[0])) {
-        for (let i = 0; i < m.length; i++) {
-            sumMant = 0
-            for (let j = 0; j < i+1; j++) {
-                sumMant += m[j][1]  // m[j][1] = Costo de mantenimietno
-            }
-            let costo = (precio+sumMant)-m[i][0]
-            listDif.push(costo)
-        }
-    } else {
-        listDif = m
-    }
-    let listaIndices = []
-    console.log("ListDif="+listDif)
-    let lista = generarLista(siguientesN)
-    console.log("Lista="+lista)
-    let val = G(listDif, 0, m.length, siguientesN, lista, listaIndices)
-    
-    console.log(listaIndices)
-    let proximo = listaIndices.reverse()
-    console.log(listaIndices)
-    console.log(proximo)
-
-    let temp = lista
-    temp.push(val)
-
-    //console.log("ARREGLO: "+temp)
-    let Gt = temp.reverse()
-    
-    console.log(proximo, Gt)
-    let planes = []
-    console.log("Plan de reemplazo")
-    console.log("T G(T) Proximo")
-    for (let i = 0; i < proximo.length; i++) {
-        let plan = []
-        //console.log(i + "\t" + Gt[i] + "\t")
-        //process.stdout.write(i + "\t" + Gt[i] + "\t");
-        for (let j = 0; j < proximo[i].length; j++) {
-            //process.stdout.write(proximo[i][j]+",");
-            //console.log(proximo[i][j]+"\t")
-        }
-        //process.stdout.write("\n")
-    }
-  
-}
-
-
-//let m = [[400,30],[300,40],[250,60]]
-//console.log(reemplazoEquipos(m,500,5))
-
-let m2 = [[7125,305],[5000,530],[3700,800],[3310,1100]]
-console.log(reemplazoEquipos(m2, 9999, 8))
-*/
+    return l;
+ }
 
 class EquipoAlgo extends React.Component{
     constructor(props) {
@@ -158,11 +44,51 @@ class EquipoAlgo extends React.Component{
           cantAnnios: this.props.cantAnnios,
           precio: this.props.precio,
           parametro1:[],
+          planReemplazo:[],
           resultadoEquipo:[]
         };
     }
+    planReemplazo=(lista,listatemp,i,planes,plan)=>{
+       
+        return this.planReemplazoAux(lista,listatemp,i,planes,plan);
+       
     
+    }
+    planReemplazoAux=(lista,listatemp,i,planes,plan)=>{
+        
+        if(listatemp.length===0){
+            
+            
 
+            return [plan]
+        }
+    
+            
+        let befPlan = new Array(plan.length);
+        for(let k = 0; k < plan.length; k++){
+            befPlan[k] = plan[k]
+        }
+        let l = []
+        for( let j = 0 ; j < listatemp.length;j++){
+            plan.push(listatemp[j]);
+            
+            let res  = this.planReemplazoAux(lista,lista[listatemp[j]],i+1,planes,plan)
+            
+            for(let k= 0 ; k < res.length; k++){
+                l.push(res[k]);
+
+            }
+            
+                
+            
+            plan = befPlan
+        
+        }
+        //console.log("LISTA PLANES")
+        //console.log(l)
+        return l
+        
+     }
     makeParameter1 = (reventa, mantenimiento)=>{
         let result = reventa.map(function(value, index) {
             return [reventa[index], mantenimiento[index]];
@@ -242,8 +168,16 @@ class EquipoAlgo extends React.Component{
         }
     
         listaIndices.push(r)
+        
+        
         return minin
+    
     }
+     
+     
+
+
+        
 
 
     reemplazoEquipos = (m, precio, siguientesN)=>{
@@ -272,6 +206,11 @@ class EquipoAlgo extends React.Component{
         console.log(listaIndices)
         let proximo = listaIndices.reverse()
         console.log(listaIndices)
+        listaIndices.push([]);
+        let planes = []
+        
+        
+        
         console.log(proximo)
     
         let temp = lista
@@ -279,16 +218,28 @@ class EquipoAlgo extends React.Component{
     
         //console.log("ARREGLO: "+temp)
         let Gt = temp.reverse()
-        
+        let plan = [0]
         console.log(proximo, Gt)
+        this.state.planReemplazo =[];
+         //let l = this.planReemplazo(proximo,proximo[0],0,planes,plan)
+         
+        
+
+       
+       
+        
         
         let resultado = []
-        resultado.push(<h2 class  ="text-white">Plan de reemplazo<br/></h2>)
-        resultado.push(<h2 class  ="text-white">T   G(T)    Proximo<br/></h2>)
+        resultado.push(<h1 class  ="text-primary">Plan de reemplazo:<br/></h1>)
+        let resultadoCaminos = [];
+
+        resultado.push(<h2 class  ="text-white">T  G(T)    Proximo<br/></h2>)
         console.log("Plan de reemplazo")
         console.log("T \t\t G(T) \t\t Proximo")
         for (let i = 0; i < proximo.length; i++) {
             let plan = []
+            
+            
             resultado.push(<h2 style={{display:"inline"}} className='text-white'>{i + "\t\t" + Gt[i] + "\t\t"}</h2>)
             //console.log(i + "\t" + Gt[i] + "\t")
             //process.stdout.write(i + "\t" + Gt[i] + "\t");
@@ -300,6 +251,36 @@ class EquipoAlgo extends React.Component{
             resultado.push(<br/>)
             //process.stdout.write("\n")
         }
+        resultado.push(<br></br>);
+            resultado.push(<br></br>);
+        resultado.push(<h1  class='text-primary'>Caminos óptimos: </h1>)
+        resultado.push(<br></br>);
+        
+        for(let k= 0;  k < proximo.length; k++){
+            resultadoCaminos = this.planReemplazo(proximo,proximo[k],k,[],[k])
+            resultado.push(<br></br>);
+            resultado.push(<br></br>);
+            resultado.push(<h2  class='text-white'>{"Si se desea iniciar en el tiempo "+ k} </h2>)
+            resultado.push(<br></br>);
+            for(let j = 0 ; j<  resultadoCaminos.length; j++){
+                resultado.push(<h3  class='text-white'>{"Camino óptimo # "+ (j+1)} </h3>)
+                for(let m = 0 ; m < resultadoCaminos[j].length; m++){
+                    let str = " -> "
+                    if(m==resultadoCaminos[j].length-1){
+                        str = ""
+                    }
+                    resultado.push(<h3 style={{display:"inline"}}  class='text-white'>{resultadoCaminos[j][m]+ str}</h3>)
+                }
+                
+                
+
+            }
+
+            console.log(  resultadoCaminos)
+
+       }
+      
+
 
 
         return resultado
@@ -315,8 +296,11 @@ class EquipoAlgo extends React.Component{
 
 
     render() {
+       
 
         
+        
+       
 
         let parametro1 = this.makeParameter1(this.state.reventa, this.state.mantenimiento)
         
