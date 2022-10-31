@@ -9,10 +9,10 @@ function planReemplazo(lista,listatemp,i,planes,plan){
 
 }
  function planReemplazoAux(lista,listatemp,i,planes,plan){
-    console.log("AAAA")
-    console.log(lista,listatemp,plan,planes)
+    
+    
     if(listatemp==[]){
-        console.log(plan)
+        
         return [plan]
     }
 
@@ -26,12 +26,19 @@ function planReemplazo(lista,listatemp,i,planes,plan){
         plan.push(listatemp[j]);
         
         let res  = planReemplazoAux(lista,lista[listatemp[j]],i+1,planes,plan)
-        
-            l.push(res)
+        for(let m = 0 ; m < res.length; m++){
+            l.push(res[m])
+
+        }
+            
             
         
-        plan = befPlan
+        plan = new Array(befPlan.length);
+        for(let k = 0; k < befPlan.length; k++){
+            plan[k] = befPlan[k]
+        }
     }
+    console.log(l)
     return l;
  }
 
@@ -50,14 +57,14 @@ class EquipoAlgo extends React.Component{
         };
     }
     planReemplazo=(lista,listatemp,i,planes,plan)=>{
-       
+        
         return this.planReemplazoAux(lista,listatemp,i,planes,plan);
        
     
     }
     planReemplazoAux=(lista,listatemp,i,planes,plan)=>{
         
-        if(listatemp.length===0){
+        if(listatemp.length==0){
             
             
 
@@ -65,28 +72,39 @@ class EquipoAlgo extends React.Component{
         }
     
             
-        let befPlan = new Array(plan.length);
+        let befPlan = []
+        console.log("PLAN:",plan)
         for(let k = 0; k < plan.length; k++){
-            befPlan[k] = plan[k]
+           befPlan=befPlan+plan[k]
+           
         }
         let l = []
         for( let j = 0 ; j < listatemp.length;j++){
-            plan.push(listatemp[j]);
             
+            plan= plan+[listatemp[j]];
+
+            
+             
+
+
+            
+                
+            console.log("TEMP[j]",listatemp[j])
             let res  = this.planReemplazoAux(lista,lista[listatemp[j]],i+1,planes,plan)
             
             for(let k= 0 ; k < res.length; k++){
+                
                 l.push(res[k]);
 
             }
             
                 
-            
+            console.log("BEFF",befPlan,"---PLAN:",plan)    
             plan = befPlan
         
         }
         //console.log("LISTA PLANES")
-        //console.log(l)
+        console.log(l)
         return l
         
      }
@@ -122,7 +140,7 @@ class EquipoAlgo extends React.Component{
         let l = []
         let kpos = []
         if (x===n) {
-            console.log("G(",x,")=0")
+            
             return 0;
         }
         
@@ -143,27 +161,26 @@ class EquipoAlgo extends React.Component{
             kpos.push(i)    
         }
     
-        console.log("G(",x,")=", Math.min(...l))
+        
         let r = []
         let minin = Math.min(...l)
-        console.log(kpos)
+        
     
         let largo = this.count(l,Math.min(...l))
         // COGER LOS POSIBLES MINIMOS
-        console.log(largo)
-        console.log(l)
+        
         for (let i = 0; i<largo; i++) {
             
-            console.log("INDEX =>>>>"+ l.indexOf(Math.min(...l)))
+        
     
             let v = kpos[l.indexOf(Math.min(...l))]
-            console.log("KPOS->"+kpos)
-            console.log("v->"+v)
+            
+            
             r.push(v)
-            console.log("antes->"+t)
+            
             l.splice(l.indexOf(Math.min(...l)),1) 
             //l = l.filter(e => e !== Math.min(...l))
-            console.log("despues->"+l)
+            
             //kpos = kpos.filter(e => e !== v)
             kpos.splice(kpos.indexOf(v),1) 
         }
@@ -185,7 +202,7 @@ class EquipoAlgo extends React.Component{
     
         let sumMant
         let listDif = []
-        console.log("m ->"+m)
+        
         if (!Number.isInteger(m[0])) {
             for (let i = 0; i < m.length; i++) {
                 sumMant = 0
@@ -199,28 +216,28 @@ class EquipoAlgo extends React.Component{
             listDif = m
         }
         let listaIndices = []
-        console.log("ListDif="+listDif)
+         
         let lista = this.generarLista(siguientesN)
-        console.log("Lista="+lista)
+         
         let val = this.G(listDif, 0, m.length, siguientesN, lista, listaIndices)
         
-        console.log(listaIndices)
+        
         let proximo = listaIndices.reverse()
-        console.log(listaIndices)
+        
         listaIndices.push([]);
-        let planes = []
         
         
         
-        console.log(proximo)
+        
+        
     
         let temp = lista
         temp.push(val)
     
         //console.log("ARREGLO: "+temp)
         let Gt = temp.reverse()
-        let plan = [0]
-        console.log(proximo, Gt)
+        
+        
         this.state.planReemplazo =[];
          //let l = this.planReemplazo(proximo,proximo[0],0,planes,plan)
 
@@ -234,28 +251,30 @@ class EquipoAlgo extends React.Component{
         resultado.push(<h1 class  ="text-primary">Plan de reemplazo:<br/></h1>)
         let resultadoCaminos = [];
 
-        resultado.push(<h2 class  ="text-white">T  G(T)    Proximo<br/></h2>)
-        console.log("Plan de reemplazo")
-        console.log("T \t\t G(T) \t\t Proximo")
+        
+        resultado.push(<h2 style={{display:"inline"}} className='text-white'>T</h2>)
+        resultado.push(<li style={ {display:"inline",opacity:"0"}}>---------</li>)
+        resultado.push(<h2 style={{display:"inline"}} className='text-white'>G(T)</h2>)
+        resultado.push(<li style={ {display:"inline",opacity:"0"}}>---------</li>)
+        resultado.push(<h2 style={{display:"inline"}} className='text-white'>Proximo</h2>)
+        resultado.push(<li style={{opacity:"0"}}>---------</li>)
+        
+        
         for (let i = 0; i < proximo.length; i++) {
             let plan = []
             
-            
-            resultado.push(<h2 style={{display:"inline"}} className='text-white'>{i + "\t\t" + Gt[i] + "\t\t"}</h2>)
-            //console.log(i + "\t" + Gt[i] + "\t")
-            //process.stdout.write(i + "\t" + Gt[i] + "\t");
+            resultado.push(<h2 style={{display:"inline"}} className='text-white'>{i}</h2>)
+            resultado.push(<li style={ {display:"inline",opacity:"0"}}>---------</li>)
+            resultado.push(<h2 style={{display:"inline"}} className='text-white'>{"\t\t" + Gt[i] + "\t\t"}</h2>)
+            resultado.push(<li style={ {display:"inline",opacity:"0"}}>---------</li>)
             for (let j = 0; j < proximo[i].length; j++) {
-                //process.stdout.write(proximo[i][j]+",");
-                //console.log(proximo[i][j]+"\t")
                 resultado.push(<h2 style={{display:"inline"}} className='text-white'>{proximo[i][j]+","}</h2>)
             }
             resultado.push(<br/>)
-            //process.stdout.write("\n")
         }
         resultado.push(<br></br>);
             resultado.push(<br></br>);
-        resultado.push(<h1  class='text-primary'>Caminos óptimos: </h1>)
-        //resultado.push(<br></br>);
+        resultado.push(<h1  class='text-primary'>Planes óptimos: </h1>)
         let divCaminos = [];
         for(let k= 0;  k < proximo.length; k++){
             
@@ -267,7 +286,7 @@ class EquipoAlgo extends React.Component{
             div.push(<h3  class='text-white'>{"Si se desea iniciar en el tiempo "+ k} </h3>)
             div.push(<br></br>);
             for(let j = 0 ; j<  resultadoCaminos.length; j++){
-                div.push(<h3  class='text-white'>{"Camino óptimo # "+ (j+1)} </h3>)
+                div.push(<h3  class='text-white'>{"Plan óptimo # "+ (j+1)} </h3>)
                 for(let m = 0 ; m < resultadoCaminos[j].length; m++){
                     let str = '\u2192';
                     if(m==resultadoCaminos[j].length-1){
