@@ -1,5 +1,6 @@
 import '../../App.css';
 import React from 'react';
+import "./Knapsack.css";
 
 function planReemplazo(lista,listatemp,i,planes,plan){
     let planesa = new Array(1);
@@ -222,7 +223,7 @@ class EquipoAlgo extends React.Component{
         console.log(proximo, Gt)
         this.state.planReemplazo =[];
          //let l = this.planReemplazo(proximo,proximo[0],0,planes,plan)
-         
+
         
 
        
@@ -254,36 +255,41 @@ class EquipoAlgo extends React.Component{
         resultado.push(<br></br>);
             resultado.push(<br></br>);
         resultado.push(<h1  class='text-primary'>Caminos óptimos: </h1>)
-        resultado.push(<br></br>);
-        
+        //resultado.push(<br></br>);
+        let divCaminos = [];
         for(let k= 0;  k < proximo.length; k++){
+            
+            let div = [];
+            div.push(<br></br>);
             resultadoCaminos = this.planReemplazo(proximo,proximo[k],k,[],[k])
-            resultado.push(<br></br>);
-            resultado.push(<br></br>);
-            resultado.push(<h2  class='text-white'>{"Si se desea iniciar en el tiempo "+ k} </h2>)
-            resultado.push(<br></br>);
+            div.push(<div className='line'></div>);
+            div.push(<br></br>);
+            div.push(<h3  class='text-white'>{"Si se desea iniciar en el tiempo "+ k} </h3>)
+            div.push(<br></br>);
             for(let j = 0 ; j<  resultadoCaminos.length; j++){
-                resultado.push(<h3  class='text-white'>{"Camino óptimo # "+ (j+1)} </h3>)
+                div.push(<h3  class='text-white'>{"Camino óptimo # "+ (j+1)} </h3>)
                 for(let m = 0 ; m < resultadoCaminos[j].length; m++){
-                    let str = " -> "
+                    let str = '\u2192';
                     if(m==resultadoCaminos[j].length-1){
                         str = ""
                     }
-                    resultado.push(<h3 style={{display:"inline"}}  class='text-white'>{resultadoCaminos[j][m]+ str}</h3>)
+                    div.push(<h3 style={{display:"inline"}}  class='text-white'>{resultadoCaminos[j][m]+ str}</h3>)
+
                 }
-                
-                
-
             }
-
-            console.log(  resultadoCaminos)
-
+            div.push(<br></br>);
+            divCaminos.push(<div>{div}</div>)
        }
       
 
 
 
-        return resultado
+        return (<div>
+                    {resultado}
+                    <div className="container-div">
+                        {divCaminos}
+                    </div>
+                </div>)
 
 
     }
