@@ -2,7 +2,7 @@ import '../../App.css';
 import React from 'react';
 import FloydMenu from '../home-menu/floydMenu';
 import FloydModal from '../../components/FloydModal';
-
+import fileSaver from "file-saver";
 
 
 
@@ -252,6 +252,12 @@ class  App extends React.Component {
 
 
     }
+
+
+       changeJuegos = (value) => {
+            this.setState({juegos:value})
+       }
+
        setd = (e)=>{
         //e.preventDefault();
         const reader = new FileReader();
@@ -260,21 +266,86 @@ class  App extends React.Component {
             
           const text = e.target.result;
           
-                    
+          console.log("asd")
+          console.log(text)
+          console.log(text.split("\n"))
+          let datos = text.split("\n")
+          let juego = datos[0].split(",")
+          let partidos = datos[1].split(",")
+          document.getElementById('numJuegos').value = parseInt(juego[0])
+          document.getElementById('probLocal').value = parseFloat(juego[1])
+          document.getElementById('probVisita').value = parseFloat(juego[2])
+
+          /*
+          this.changeJuegos(parseInt(juego[0]))
+          this.setState({propLocal:parseInt(juego[1])})
+          this.setState({propVisit:parseInt(juego[2])})
           
           
-          {this.changeM( parseM(leerCsv(text,",",true)),leerCsvHeader(text))}          
-           
-           
+          this.setState({localiasValues:partidos})
+          */
+          this.handlePartidos(partidos)
+          this.setState({propLocal:parseFloat(juego[1])})
+          this.setState({propVisit:parseFloat(juego[2])})
+          
+          console.log("JUEGOS->"+this.state.juegos)
+          console.log("PARTIDOS->"+this.state.localiasValues)
+          console.log(partidos)
+          this.handleAmountGames2(parseInt(juego[0]), partidos)
+
                           
         };
             reader.readAsText(e.target.files[0]);
-        this.handleAddSecondInput()        
     }
     handleSeries = (e)=>{
+        console.log("Propiedades")
+        console.log(this.state.propLocal)
+        console.log(this.state.propVisit)
+        console.log(this.state.localiasValues)
+        console.log(this.state.juegos)
+
         this.setState({inputLinkClicked:true})
     }
    
+    handlePartidos = (e) => {
+        this.setState({localiasValues:e})
+    }
+
+
+    handleAmountGames2=(e, partidos)=>{
+        
+        
+        if(parseInt(e)*2-1 < this.state.localiasValues.length){
+            for(let i  = parseInt(e)*2-1; i < this.state.localiasValues.length+1; i++){
+                this.state.localiasValues.pop();
+                this.state.localias.pop();
+            }
+        } else if(parseInt(e)*2-1 > this.state.localiasValues.length) {
+            
+            for(let i  = this.state.localiasValues.length ; i < parseInt(e)*2-1; i ++){
+                console.log("<---->")
+                console.log(this.state.localiasValues)
+                console.log("<---->")
+                console.log(this.state.localiasValues[i])
+                this.state.localias.push([<p style = {{display:"inline"}}class= "text-white">{"Equipo Local Partido #"+ (i+1)+': '}</p>,
+                
+                <h2 class = "text-primary"id = {'Props'+i}style = {{display:"inline"}}>{partidos[i]}</h2>,<li style = {{display:"inline"}}>-</li>,
+                <button onClick = {evt=>this.cambiarLocalias(evt,i)}style = {{display:"inline"}}class= "btn bg-dark text-white">Cambiar</button>,<br></br>,<br></br>])
+                
+             
+            }
+            
+        }
+
+        
+      
+        this.setState({juegos:e})
+        
+
+    }
+
+
+
     handleAmountGames=(e)=>{
         
         
@@ -318,6 +389,18 @@ class  App extends React.Component {
 
     }
 
+
+    saveFile = () => {        
+        const blob = new Blob( [
+            this.state.juegos+","+this.state.propLocal+","+this.state.propVisit+"\n",
+            this.state.localiasValues
+        ], { type: 'text/plan;charset=utf8'});
+        fileSaver.saveAs( blob, "series.txt");
+
+    }
+
+
+
   render (){
     
 /**
@@ -336,7 +419,7 @@ class  App extends React.Component {
         <div  id = "1" className = "p-5 ms-auto">       
         <h1 className='text-center text-white'>Series Deportivas </h1>            
         <div className="mb-3 cont">            
-        <h2 className=' text-primary'>Seleccionar un archivo de prueba:</h2>            
+        <h2 id="fileInput" className=' text-primary'>Seleccionar un archivo de prueba:</h2>            
         <input  className=" form-control text-white bg-dark" type="file" id="formFile" onChange={this.setd}></input>
         <br></br>
         
@@ -344,15 +427,15 @@ class  App extends React.Component {
         <h2 className=' text-white'> Crear dinámicamente:</h2>    
         <br></br>
         <p className=' text-white'>Ingrese el número de juegos</p>         
-        <input onChange={this.handleAmountGames} className='form-control text-white bg-dark' type="number"></input><br/>
+        <input id="numJuegos" onChange={this.handleAmountGames} className='form-control text-white bg-dark' type="number"></input><br/>
         
         <p  className=' text-white'>Probabilidad de que el equipo 'A' gane de LOCAL:</p>    
              
-        <input style = {{display:"inline-block"}} onChange={evt =>{this.setState({propLocal:parseFloat(evt.target.value)})}} className='form-control text-white bg-dark' type="number"></input><br/>
+        <input id="probLocal" style = {{display:"inline-block"}} onChange={evt =>{this.setState({propLocal:parseFloat(evt.target.value)})}} className='form-control text-white bg-dark' type="number"></input><br/>
         <br></br>
         <p style = {{display:"inline-block"}} className=' text-white'>Probabilidad de que el equipo 'A' gane de VISITANTE:</p>    
         
-        <input onChange={evt =>{this.setState({propVisit:parseFloat(evt.target.value)})}} className='form-control text-white bg-dark' type="number"></input><br/>
+        <input id="probVisita" onChange={evt =>{this.setState({propVisit:parseFloat(evt.target.value)})}} className='form-control text-white bg-dark' type="number"></input><br/>
         {this.state.localias.length!= 0
         ?
 
@@ -367,7 +450,8 @@ class  App extends React.Component {
         </div>
 
         :<></>}
-        <button onClick={this.handleSeries} type="button" class="btn btn-secondary btn-outline-white">Calcular probabilidades </button>
+        <button onClick={this.handleSeries} type="button" class="btn btn-secondary btn-outline-white">Calcular probabilidades </button><br></br>
+        
         </div>
 
         
@@ -381,6 +465,8 @@ class  App extends React.Component {
                     <h2 className=' text-white'>Creado dinámicamente:</h2>            
                     <br></br>
                     <SeriesD pqh = {[this.state.propLocal,1-this.state.propLocal]} pqr = {[this.state.propVisit,1-this.state.propVisit]} localias = {this.state.localiasValues} mejorDeN = {this.state.juegos}></SeriesD> 
+                    <br></br>
+                    <button onClick={this.saveFile} type="button" class="btn btn-secondary btn-outline-white">Grabar archivo</button>
                     
                     
                 </div>
