@@ -1,5 +1,6 @@
 import '../../App.css';
 import React from 'react';
+import "./Knapsack.css";
 
 function planReemplazo(lista,listatemp,i,planes,plan){
     let planesa = new Array(1);
@@ -239,7 +240,7 @@ class EquipoAlgo extends React.Component{
         
         this.state.planReemplazo =[];
          //let l = this.planReemplazo(proximo,proximo[0],0,planes,plan)
-         
+
         
 
        
@@ -265,53 +266,49 @@ class EquipoAlgo extends React.Component{
             resultado.push(<h2 style={{display:"inline"}} className='text-white'>{i}</h2>)
             resultado.push(<li style={ {display:"inline",opacity:"0"}}>---------</li>)
             resultado.push(<h2 style={{display:"inline"}} className='text-white'>{"\t\t" + Gt[i] + "\t\t"}</h2>)
-            //console.log(i + "\t" + Gt[i] + "\t")
-            //process.stdout.write(i + "\t" + Gt[i] + "\t");
             resultado.push(<li style={ {display:"inline",opacity:"0"}}>---------</li>)
             for (let j = 0; j < proximo[i].length; j++) {
-                //process.stdout.write(proximo[i][j]+",");
-                //console.log(proximo[i][j]+"\t")
                 resultado.push(<h2 style={{display:"inline"}} className='text-white'>{proximo[i][j]+","}</h2>)
             }
             resultado.push(<br/>)
-            //process.stdout.write("\n")
         }
         resultado.push(<br></br>);
             resultado.push(<br></br>);
         resultado.push(<h1  class='text-primary'>Planes óptimos: </h1>)
-        resultado.push(<br></br>);
-        let planes = []
+        let divCaminos = [];
         for(let k= 0;  k < proximo.length; k++){
             
-            resultadoCaminos = this.planReemplazo(proximo,proximo[k],0,[],[k])
-            resultado.push(<br></br>);
-            resultado.push(<br></br>);
-            resultado.push(<h2  class='text-white'>{"Si se desea iniciar en el tiempo "+ k} </h2>)
-            resultado.push(<br></br>);
+            let div = [];
+            div.push(<br></br>);
+            resultadoCaminos = this.planReemplazo(proximo,proximo[k],k,[],[k])
+            div.push(<div className='line'></div>);
+            div.push(<br></br>);
+            div.push(<h3  class='text-white'>{"Si se desea iniciar en el tiempo "+ k} </h3>)
+            div.push(<br></br>);
             for(let j = 0 ; j<  resultadoCaminos.length; j++){
-                resultado.push(<h3  class='text-white'>{"Plan óptimo # "+ (j+1)} </h3>)
+                div.push(<h3  class='text-white'>{"Plan óptimo # "+ (j+1)} </h3>)
                 for(let m = 0 ; m < resultadoCaminos[j].length; m++){
-                    let str = " -> "
+                    let str = '\u2192';
                     if(m==resultadoCaminos[j].length-1){
                         str = ""
                     }
-                    console.log(resultadoCaminos[j])
-                    resultado.push(<h3 style={{display:"inline"}}  class='text-white'>{resultadoCaminos[j][m]+ str}</h3>)
+                    div.push(<h3 style={{display:"inline"}}  class='text-white'>{resultadoCaminos[j][m]+ str}</h3>)
+
                 }
-                resultado.push(<br></br>)
-                
-                
-
             }
-
-            console.log(  resultadoCaminos)
-
+            div.push(<br></br>);
+            divCaminos.push(<div>{div}</div>)
        }
       
 
 
 
-        return resultado
+        return (<div>
+                    {resultado}
+                    <div className="container-div">
+                        {divCaminos}
+                    </div>
+                </div>)
 
 
     }
