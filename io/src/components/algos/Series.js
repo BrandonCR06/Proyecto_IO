@@ -281,7 +281,7 @@ class  App extends React.Component {
         if(this.state.localiasValues.length==0){
             this.state.localiasValues = []
 
-            for(let i  = 0 ; i < parseInt(e.target.value)*2; i ++){
+            for(let i  = 0 ; i < parseInt(e.target.value)*2-1; i ++){
                 this.state.localiasValues.push('A');
                 this.state.localias.push([<p style = {{display:"inline"}}class= "text-white">{"Equipo Local Partido #"+ (i+1)+': '}</p>,
 
@@ -290,14 +290,14 @@ class  App extends React.Component {
             }
 
         } else {
-            if(parseInt(e.target.value)*2 < this.state.localiasValues.length){
-                for(let i  = parseInt(e.target.value)*2; i < this.state.localiasValues.length+1; i++){
+            if(parseInt(e.target.value)*2-1 < this.state.localiasValues.length){
+                for(let i  = parseInt(e.target.value)*2-1; i < this.state.localiasValues.length+1; i++){
                     this.state.localiasValues.pop();
                     this.state.localias.pop();
                 }
-            } else if(parseInt(e.target.value)*2 > this.state.localiasValues.length) {
+            } else if(parseInt(e.target.value)*2-1 > this.state.localiasValues.length) {
                 
-                for(let i  = this.state.localiasValues.length ; i < parseInt(e.target.value)*2; i ++){
+                for(let i  = this.state.localiasValues.length ; i < parseInt(e.target.value)*2-1; i ++){
                     this.state.localiasValues.push('A');
 
                     this.state.localias.push([<p style = {{display:"inline"}}class= "text-white">{"Equipo Local Partido #"+ (i+1)+': '}</p>,
