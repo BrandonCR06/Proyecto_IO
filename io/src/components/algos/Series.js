@@ -60,14 +60,15 @@ class SeriesD extends React.Component{
                     if(l[(i+j)-2]=="A"){
 
                         m[i][j] = (m[i-1][j] *normal_prob[0])+(m[i][j-1] *normal_prob[1])
+
                     }else{
                         m[i][j] = (m[i-1][j] *local_visitor_prob[0])+(m[i][j-1] *local_visitor_prob[1])
                     }
+                    m[i][j] = m[i][j].toPrecision(4)
                 }
             }        
             
-        }
-        console.log(m)
+        }        
         return m;
         }
 
@@ -78,7 +79,7 @@ class SeriesD extends React.Component{
         render(){            
         
        
-        let  m =this.calculateLocalia(this.props.pqh,this.props.pqr,this.props.mejorDeN,this.props.localias) 
+        let  m =this.calculateLocalia(this.props.pqh,this.props.pqr,this.props.mejorDeN,this.props.localias.reverse()) 
         console.log(m, this.props.pqh,this.props.pqr,this.props.mejorDeN, this.props.localias)
         //console.log(this.state.tablaP)
         //this.setAddModalOpen(true);
