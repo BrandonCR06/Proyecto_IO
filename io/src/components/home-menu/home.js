@@ -28,9 +28,9 @@ function Home() {
           Árboles Binarios de Búsqueda Óptimos
         </button>
         <li > </li>
-        <button type="button" class="btn btn-secondary btn-block btn-outline-white" data-toggle="tooltip" data-placement="bottom" title="Problemas en los cuales se calcula la probabilidades de victorias de equipos de deportes con respecto a sus posibilidades de ganar en casa o de visita" onClick = {notAvailable}>
+        <a href = '/Series' type="button" class="btn btn-secondary btn-block btn-outline-white" data-toggle="tooltip" data-placement="bottom" title="Problemas en los cuales se calcula la probabilidades de victorias de equipos de deportes con respecto a sus posibilidades de ganar en casa o de visita" >
           Series Deportivas
-        </button>
+        </a>
         <li > </li>
         <button type="button" class="btn btn-secondary btn-block btn-outline-white" data-toggle="tooltip" data-placement="bottom" title="Consiste en combinar linealmente dos o más matrices mediante la adición de sus elementos dependiendo de su situación dentro de la matriz origen respetando el orden de los factores." onClick = {notAvailable}>
             Multiplicación de Matrices  
