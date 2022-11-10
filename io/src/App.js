@@ -5,6 +5,7 @@ import FloydMenu from './components/home-menu/floydMenu.js';
 import Knapsack from './components/algos/Knapsack.js';
 import Equipo from './components/algos/reemplazo.js';
 import {Series, Floydw} from './components/algos/Series'
+import Matrix from './components/algos/Matrix'
 function App() {
   return (
     <div>
@@ -16,6 +17,7 @@ function App() {
           <Route path='/FloydMenu' element={<FloydMenu/>} />
           <Route path='/Knapsack' element={<Knapsack/>} />
           <Route path='/Equipo' element={<Equipo/>} />
+          <Route path='/Matrix' element={<Matrix/>} />
           <Route path='/Series' element={<Series/>} />
         </Routes>
       </BrowserRouter>
