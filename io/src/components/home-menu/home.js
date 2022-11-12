@@ -24,9 +24,9 @@ function Home() {
           Reemplazo de equipos
         </a>
         <li > </li>
-        <button type="button" class="btn btn-secondary btn-block btn-outline-white" data-toggle="tooltip" data-placement="bottom" title="Es un tipo particular de árbol binario que presenta una estructura de datos en forma de árbol usada para tomar desiciones de la mejor forma posible" onClick = {notAvailable}>
+        <a href = "/Arbol" type="button" class="btn btn-secondary btn-block btn-outline-white" data-toggle="tooltip" data-placement="bottom" title="Es un tipo particular de árbol binario que presenta una estructura de datos en forma de árbol usada para tomar desiciones de la mejor forma posible">
           Árboles Binarios de Búsqueda Óptimos
-        </button>
+        </a>
         <li > </li>
         <a href = '/Series' type="button" class="btn btn-secondary btn-block btn-outline-white" data-toggle="tooltip" data-placement="bottom" title="Problemas en los cuales se calcula la probabilidades de victorias de equipos de deportes con respecto a sus posibilidades de ganar en casa o de visita" >
           Series Deportivas

@@ -6,6 +6,8 @@ import Knapsack from './components/algos/Knapsack.js';
 import Equipo from './components/algos/reemplazo.js';
 import {Series, Floydw} from './components/algos/Series'
 import Matrix from './components/algos/Matrix'
+import Arbol from './components/algos/arboles.js';
+
 function App() {
   return (
     <div>
@@ -19,6 +21,7 @@ function App() {
           <Route path='/Equipo' element={<Equipo/>} />
           <Route path='/Matrix' element={<Matrix/>} />
           <Route path='/Series' element={<Series/>} />
+          <Route path='/Arbol' element={<Arbol/>} />
         </Routes>
       </BrowserRouter>
     </div>
