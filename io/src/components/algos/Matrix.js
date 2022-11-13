@@ -270,8 +270,8 @@ class DimensionComp extends React.Component {
         this.state = {
            id:this.props.id,
            anteriorCol: this.props.anteriorCol,
-           col: '',
-           siguiente:'',
+           col: this.props.col,
+           siguiente:this.props.anteriorCol,
            anterior: this.props.anterior           
 
           }
@@ -300,10 +300,10 @@ class DimensionComp extends React.Component {
         <div >
         <p style = {{display:"inline"}} class=' text-white'>Fila  </p>    
 
-        <input id = {'PR'+(this.props.id)} style = {{display:"inline",maxWidth:"15%"}}   defaultValue={this.props.anteriorCol} class='form-controlDimsRow form-control text-white bg-dark' type="text"></input>
+        <input id = {'PR'+(this.props.id)} style = {{display:"inline",maxWidth:"18%"}}   defaultValue={this.props.anteriorCol} class='form-controlDimsRow form-control text-white bg-dark' type="text"></input>
         <li style = {{display:"inline",opacity:'0'}}>----</li>
         <p style = {{display:"inline"}} class=' text-white'>Col  </p>    
-        <input onChange={this.changeColRow}style = {{display:"inline",maxWidth:"15%"}}   defaultValue={this.state.col}  class='form-controlDimsCol form-control text-white bg-dark' type="text"></input>
+        <input onChange={this.changeColRow}style = {{display:"inline",maxWidth:"18%"}}   defaultValue={this.state.col}  class='form-controlDimsCol form-control text-white bg-dark' type="text"></input>
         
         </div>
         
@@ -341,39 +341,34 @@ class  App extends React.Component {
 
        setd = (e)=>{
         //e.preventDefault();
+
+        this.setState({inputLinkClicked:false})
+        this.setState({matsAmount:[]})
+        this.setState({dims:[]})
+        this.setState({dimsData:[]})
+
         const reader = new FileReader();
-        
+    
         reader.onload = (e) => {
             
           const text = e.target.result;
-          
-          console.log("asd")
+
           console.log(text)
-          console.log(text.split("\n"))
-          let datos = text.split("\n")
-          let juego = datos[0].split(",")
-          let partidos = datos[1].split(",")
-          document.getElementById('numJuegos').value = parseInt(juego[0])
-          document.getElementById('probLocal').value = parseFloat(juego[1])
-          document.getElementById('probVisita').value = parseFloat(juego[2])
+          console.log(text.split(","))
+          let datos = text.split(",")
 
-          /*
-          this.changeJuegos(parseInt(juego[0]))
-          this.setState({propLocal:parseInt(juego[1])})
-          this.setState({propVisit:parseInt(juego[2])})
+          document.getElementById('numMatrices').value = parseInt(datos.length)
           
-          
-          this.setState({localiasValues:partidos})
-          */
-          this.handlePartidos(partidos)
-          this.setState({propLocal:parseFloat(juego[1])})
-          this.setState({propVisit:parseFloat(juego[2])})
-          
-          console.log("JUEGOS->"+this.state.juegos)
-          console.log("PARTIDOS->"+this.state.localiasValues)
-          console.log(partidos)
-          this.handleAmountGames2(parseInt(juego[0]), partidos)
 
+          let matriz = []
+          for (let i=0; i<datos.length; i++) {
+
+            let separador = datos[i].split("x")
+            let fila = separador[0]
+            let columna = separador[1]
+            matriz.push(fila, columna)
+            this.updateClassMat2(datos.length, fila, columna)
+          }
                           
         };
             reader.readAsText(e.target.files[0]);
@@ -416,12 +411,21 @@ class  App extends React.Component {
 
 
 
-    saveFile = () => {        
+    saveFile = () => {
+        console.log(this.state.dimsData)
+        let string = ""
+        for (let i=0; i<this.state.dimsData.length; i++) {
+            if (i === this.state.dimsData.length-1) {
+                string += this.state.dimsData[i][0] + "x" + this.state.dimsData[i][1]    
+            } else {
+                string += this.state.dimsData[i][0] + "x" + this.state.dimsData[i][1] + ","
+            }
+        }
+        
         const blob = new Blob( [
-            this.state.juegos+","+this.state.propLocal+","+this.state.propVisit+"\n",
-            this.state.localiasValues
+            string
         ], { type: 'text/plan;charset=utf8'});
-        fileSaver.saveAs( blob, "series.txt");
+        fileSaver.saveAs( blob, "matriz.txt");
 
     }
     updateClassMat = (e)=>{
@@ -455,6 +459,40 @@ class  App extends React.Component {
         
 
     }
+
+    updateClassMat2 = (n, fila, columna)=>{
+        let num = parseInt(n)
+        if(this.state.dims.length>num){
+            this.state.dims.pop()
+
+        }
+        else{
+            
+
+            let l = this.state.dims.length
+            let anterior=false;
+            let inst;            
+            inst = <DimensionComp anteriorCol = {fila} col = {columna} id = {l}></DimensionComp>;
+            
+            
+            
+            this.state.dims.push(inst)
+            console.log(this.state.dims)
+
+            
+            
+        }
+
+
+        this.setState({matsAmount:parseInt(n)})
+        
+        
+        
+        
+
+    }
+
+
 componentDidUpdate (){
     
     //console.log(this.state.dims)
@@ -487,7 +525,7 @@ componentDidUpdate (){
         <h2 className=' text-white'> Crear dinámicamente:</h2>    
         <br></br>
         <p className=' text-white'>Ingrese la cantidad de matrices</p>         
-        <input id="numJuegos" onChange={this.updateClassMat} className='form-control text-white bg-dark' type="number"></input><br/>
+        <input id="numMatrices" onChange={this.updateClassMat} className='form-control text-white bg-dark' type="number"></input><br/>
         
         
 
@@ -515,6 +553,7 @@ componentDidUpdate (){
         <br></br>
         <MatrixComp dims = {this.state.dimsData}></MatrixComp> 
         <br></br>
+        <button onClick={this.saveFile} type="button" class="btn btn-secondary btn-outline-white">Grabar archivo</button>
         </div>
 
 
