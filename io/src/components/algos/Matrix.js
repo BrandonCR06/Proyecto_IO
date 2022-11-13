@@ -7,15 +7,11 @@ import fileSaver from "file-saver";
 
 
  
-class SeriesD extends React.Component{
+class MatrixComp extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
-            localias: this.props.localias,            
-             pqh : this.props.pqh,
-             pqr : this.props.pqr,
-             mejorDeN: this.props.mejorDeN,
-          modalOpen: false
+            dims:[]
         };
       
       }
@@ -124,7 +120,7 @@ class SeriesD extends React.Component{
           res.splice(res.indexOf(currentN)+1,0, ')')
           
           if(M[start][currentN-1-1]== 0){
-              res.splice(res.indexOf(start+1)+1,0, 'x')
+              res.splice(res.indexOf(start+1)+1,0, '•')
               break
           }
           if(M[start][currentN-1]==start+1){
@@ -158,7 +154,7 @@ class SeriesD extends React.Component{
       
     render(){            
             
-  let l =[[5,9],[9,3],[3,4],[4,6],[6,7],[7,8]]
+  let l =this.props.dims
   //l = [[4,6],[6,2],[2,7]]
   
   let g = []
@@ -180,11 +176,15 @@ class SeriesD extends React.Component{
     
         return (
             <div>
-            
+            <h4 class = 'text-white'>Tabla R</h4>
+            {desplegarTablas([Tabla([],multMatT[0])])}
+            <br></br>
+            <h4 class = 'text-white'>Tabla M</h4>
             {desplegarTablas([Tabla([],multMatT[1])])}
-
+            
+            <h4 class = 'text-white'>Orden de multiplicaciones:</h4>
             <h4 class = 'text-white'>{a}</h4>
-            <FloydModal isOpen={this.state.modalOpen} onClose={() => this.setAddModalOpen(false)} tablaP = {this.state.tablaP} vertices={this.props.vertices}/>
+            
              </div>
         
 
@@ -226,7 +226,7 @@ function Tabla(filas, matrix) {
     for(let i =0;i <matrix.length;i++){
         let cols = []        
         for(let j =0;j <matrix.length;j++){
-            cols.push(Columns('text-white bg-primary',matrix[i][j]))
+            cols.push(Columns('text-white bg-primary bg-opacity-25 ',matrix[i][j]))
             
 
         }
@@ -264,19 +264,62 @@ function Tabla(filas, matrix) {
         );
     
 }
+class DimensionComp extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+           id:this.props.id,
+           anteriorCol: this.props.anteriorCol,
+           col: '',
+           siguiente:'',
+           anterior: this.props.anterior           
+
+          }
+        this.setColAnt();
+      }
+      
+      setSig=(val)=>{
+        this.setState({siguiente:val})
+
+
+      }
+      setColAnt=()=>{
+        if(this.state.anterior) this.setState({anteriorCol:this.state.anterior.props.col})
+
+      }
+      changeColRow = (e)=>{
+        let col1 = parseInt(e.target.value)
+        console.log(this.props.id+1)
+        document.getElementById('PR'+(this.props.id+1)).value = parseInt(col1)
+
+        
+
+      }
+    render(){
+        return(
+        <div >
+        <p style = {{display:"inline"}} class=' text-white'>Fila  </p>    
+
+        <input id = {'PR'+(this.props.id)} style = {{display:"inline",maxWidth:"15%"}}   defaultValue={this.props.anteriorCol} class='form-controlDimsRow form-control text-white bg-dark' type="text"></input>
+        <li style = {{display:"inline",opacity:'0'}}>----</li>
+        <p style = {{display:"inline"}} class=' text-white'>Col  </p>    
+        <input onChange={this.changeColRow}style = {{display:"inline",maxWidth:"15%"}}   defaultValue={this.state.col}  class='form-controlDimsCol form-control text-white bg-dark' type="text"></input>
+        
+        </div>
+        
+        )
+
+    }
+}
 
 class  App extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             inputLinkClicked: false,
-            m :[],
-            propLocal:0,
-            propVisit:0,
-            juegos:0,
-            localias:[],
-            localiasValues:[],
-            
+           matsAmount:[],
+            dims :[],
+            dimsData:[]
 
           }
       }
@@ -292,31 +335,9 @@ class  App extends React.Component {
 
       }
 
-    cambiarLocalias =(e,i)=>{
-        
-        
-        
-        let arr1 = this.state.localiasValues;
-        if(arr1[i] =='A'){
-            
-            arr1[i]= 'B'
-        } else {
-            
-            arr1[i]= 'A'
-
-        }
-        this.setState({localiasValues:arr1})
-        console.log(this.state.localiasValues)
-        document.getElementById('Props'+i).innerHTML = arr1[i]
-        
+  
 
 
-    }
-
-
-       changeJuegos = (value) => {
-            this.setState({juegos:value})
-       }
 
        setd = (e)=>{
         //e.preventDefault();
@@ -358,13 +379,19 @@ class  App extends React.Component {
             reader.readAsText(e.target.files[0]);
     }
     handleSeries = (e)=>{
-        console.log("Propiedades")
-        console.log(this.state.propLocal)
-        console.log(this.state.propVisit)
-        console.log(this.state.localiasValues)
-        console.log(this.state.juegos)
+        
+        let row = document.getElementsByClassName('form-controlDimsRow')
+        let col = document.getElementsByClassName('form-controlDimsCol')
+        
+        let dims = []
+        for(let i = 0 ; i < row.length; i++){
+            dims.push([row[i].value,col[i].value])
 
-        this.setState({inputLinkClicked:true})
+        
+
+        }
+        this.setState({inputLinkClicked:true,dimsData:dims})
+        
     }
    
     handlePartidos = (e) => {
@@ -372,82 +399,21 @@ class  App extends React.Component {
     }
 
 
-    handleAmountGames2=(e, partidos)=>{
+    handleMat=(e)=>{
         
         
-        if(parseInt(e)*2-1 < this.state.localiasValues.length){
-            for(let i  = parseInt(e)*2-1; i < this.state.localiasValues.length+1; i++){
-                this.state.localiasValues.pop();
-                this.state.localias.pop();
-            }
-        } else if(parseInt(e)*2-1 > this.state.localiasValues.length) {
-            
-            for(let i  = this.state.localiasValues.length ; i < parseInt(e)*2-1; i ++){
-                console.log("<---->")
-                console.log(this.state.localiasValues)
-                console.log("<---->")
-                console.log(this.state.localiasValues[i])
-                this.state.localias.push([<p style = {{display:"inline"}}class= "text-white">{"Equipo Local Partido #"+ (i+1)+': '}</p>,
-                
-                <h2 class = "text-primary"id = {'Props'+i}style = {{display:"inline"}}>{partidos[i]}</h2>,<li style = {{display:"inline"}}>-</li>,
-                <button onClick = {evt=>this.cambiarLocalias(evt,i)}style = {{display:"inline"}}class= "btn bg-dark text-white">Cambiar</button>,<br></br>,<br></br>])
-                
-             
-            }
-            
-        }
+        
+        
+        
 
         
       
-        this.setState({juegos:e})
+        
         
 
     }
 
 
-
-    handleAmountGames=(e)=>{
-        
-        
-        if(this.state.localiasValues.length==0){
-            this.state.localiasValues = []
-
-            for(let i  = 0 ; i < parseInt(e.target.value)*2-1; i ++){
-                this.state.localiasValues.push('A');
-                this.state.localias.push([<p style = {{display:"inline"}}class= "text-white">{"Equipo Local Partido #"+ (i+1)+': '}</p>,
-
-            <h2 class = "text-primary" id = {'Props'+i} style = {{display:"inline"}}>{this.state.localiasValues[i]}</h2>,<li style = {{display:"inline"}}>-</li>,
-            <button onClick = {evt=>this.cambiarLocalias(evt,i)}style = {{display:"inline"}}class= "btn bg-dark text-white">Cambiar</button>,<br></br>,<br></br>])
-            }
-
-        } else {
-            if(parseInt(e.target.value)*2-1 < this.state.localiasValues.length){
-                for(let i  = parseInt(e.target.value)*2-1; i < this.state.localiasValues.length+1; i++){
-                    this.state.localiasValues.pop();
-                    this.state.localias.pop();
-                }
-            } else if(parseInt(e.target.value)*2-1 > this.state.localiasValues.length) {
-                
-                for(let i  = this.state.localiasValues.length ; i < parseInt(e.target.value)*2-1; i ++){
-                    this.state.localiasValues.push('A');
-
-                    this.state.localias.push([<p style = {{display:"inline"}}class= "text-white">{"Equipo Local Partido #"+ (i+1)+': '}</p>,
-
-                    <h2 class = "text-primary"id = {'Props'+i}style = {{display:"inline"}}>{'A'}</h2>,<li style = {{display:"inline"}}>-</li>,
-                    <button onClick = {evt=>this.cambiarLocalias(evt,i)}style = {{display:"inline"}}class= "btn bg-dark text-white">Cambiar</button>,<br></br>,<br></br>])
-                    
-                 
-                }
-                
-            }
-        }
-
-        
-      
-        this.setState({juegos:parseInt(e.target.value)})
-        
-
-    }
 
 
     saveFile = () => {        
@@ -458,8 +424,42 @@ class  App extends React.Component {
         fileSaver.saveAs( blob, "series.txt");
 
     }
+    updateClassMat = (e)=>{
+        let num = parseInt(e.target.value)
+        if(this.state.dims.length>num){
+            this.state.dims.pop()
+
+        }
+        else{
+            
+
+            let l = this.state.dims.length
+            let anterior=false;
+            let inst;            
+            inst = <DimensionComp anterior = {anterior}id = {l}></DimensionComp>;
+            
+            
+            
+            this.state.dims.push(inst)
+            console.log(this.state.dims)
+
+            
+            
+        }
 
 
+        this.setState({matsAmount:parseInt(e.target.value)})
+        
+        
+        
+        
+
+    }
+componentDidUpdate (){
+    
+    //console.log(this.state.dims)
+    
+}
 
   render (){
     
@@ -477,7 +477,7 @@ class  App extends React.Component {
    
     return(
         <div  id = "1" className = "p-5 ms-auto">       
-        <h1 className='text-center text-white'>Series Deportivas </h1>            
+        <h1 className='text-center text-white'>Multiplicación de matrices </h1>            
         <div className="mb-3 cont">            
         <h2 id="fileInput" className=' text-primary'>Seleccionar un archivo de prueba:</h2>            
         <input  className=" form-control text-white bg-dark" type="file" id="formFile" onChange={this.setd}></input>
@@ -486,54 +486,42 @@ class  App extends React.Component {
         
         <h2 className=' text-white'> Crear dinámicamente:</h2>    
         <br></br>
-        <p className=' text-white'>Ingrese el número de juegos</p>         
-        <input id="numJuegos" onChange={this.handleAmountGames} className='form-control text-white bg-dark' type="number"></input><br/>
+        <p className=' text-white'>Ingrese la cantidad de matrices</p>         
+        <input id="numJuegos" onChange={this.updateClassMat} className='form-control text-white bg-dark' type="number"></input><br/>
         
-        <p  className=' text-white'>Probabilidad de que el equipo 'A' gane de LOCAL:</p>    
-             
-        <input id="probLocal" style = {{display:"inline-block"}} onChange={evt =>{this.setState({propLocal:parseFloat(evt.target.value)})}} className='form-control text-white bg-dark' type="number"></input><br/>
-        <br></br>
-        <p style = {{display:"inline-block"}} className=' text-white'>Probabilidad de que el equipo 'A' gane de VISITANTE:</p>    
         
-        <input id="probVisita" onChange={evt =>{this.setState({propVisit:parseFloat(evt.target.value)})}} className='form-control text-white bg-dark' type="number"></input><br/>
-        {this.state.localias.length!= 0
-        ?
 
+        <br></br>
         <div>
-               {this.state.localias.map((data) => (
-  
-              data
+            {this.state.dims.map((data) => (
+                <div>
+                    
+              {data}
+              <br></br>
+              
+              </div>
               
             ))}
+
           
             
         </div>
+        <button onClick={this.handleSeries} type="button" class="btn btn-secondary btn-outline-white">Calcular multiplicaciones óptimas </button><br></br>
 
-        :<></>}
-        <button onClick={this.handleSeries} type="button" class="btn btn-secondary btn-outline-white">Calcular probabilidades </button><br></br>
-        
+        </div>
+        {this.state.inputLinkClicked?
+        <div>
+        <h2 className=' text-white'>Creado dinámicamente:</h2>            
+        <br></br>
+        <MatrixComp dims = {this.state.dimsData}></MatrixComp> 
+        <br></br>
         </div>
 
-        
-        
-        
-        
-                             
-        
-            {this.state.inputLinkClicked?           
-                <div>
-                    <h2 className=' text-white'>Creado dinámicamente:</h2>            
-                    <br></br>
-                    <SeriesD pqh = {[this.state.propLocal,1-this.state.propLocal]} pqr = {[this.state.propVisit,1-this.state.propVisit]} localias = {this.state.localiasValues} mejorDeN = {this.state.juegos}></SeriesD> 
-                    <br></br>
-                    <button onClick={this.saveFile} type="button" class="btn btn-secondary btn-outline-white">Grabar archivo</button>
-                    
-                    
-                </div>
-              :
 
-              <div></div>
-            }
+
+
+        : <></>}
+                             
         
     </div>
     )
