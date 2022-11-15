@@ -114,19 +114,27 @@ class MatrixComp extends React.Component{
       let start= 0
       let res = matList
       while (true){
+        if(M[start][currentN-1-1]== 0){
+              
+            break
+        }
+          let val = M[start][currentN-1]
+        if(start+1!= val){
+          res.splice(res.indexOf(start+1),0, '( ')
+          res.splice(res.indexOf(val)+1,0, ' )')
           
-          res.splice(res.indexOf(start+1),0, '(')
-  
-          res.splice(res.indexOf(currentN)+1,0, ')')
+        }
+        if(val+1!= currentN){
+          res.splice(res.indexOf(val+1),0, ' (')
+          res.splice(res.indexOf(currentN)+1,0, ' )')
+         
+        }
+        console.log(res)
           
-          if(M[start][currentN-1-1]== 0){
-              res.splice(res.indexOf(start+1)+1,0, '•')
-              break
-          }
           if(M[start][currentN-1]==start+1){
   
               start+=1
-              currentN = n
+              
           }
           else{
               currentN-=1
@@ -361,13 +369,14 @@ class  App extends React.Component {
           
 
           let matriz = []
+          this.state.dims=[]
           for (let i=0; i<datos.length; i++) {
 
             let separador = datos[i].split("x")
             let fila = separador[0]
             let columna = separador[1]
             matriz.push(fila, columna)
-            this.updateClassMat2(datos.length, fila, columna)
+            this.updateClassMat2(datos.length, fila, columna,i)
           }
                           
         };
@@ -430,26 +439,16 @@ class  App extends React.Component {
     }
     updateClassMat = (e)=>{
         let num = parseInt(e.target.value)
-        if(this.state.dims.length>num){
-            this.state.dims.pop()
-
-        }
-        else{
-            
-
-            let l = this.state.dims.length
-            let anterior=false;
-            let inst;            
-            inst = <DimensionComp anterior = {anterior}id = {l}></DimensionComp>;
+        this.state.dims = []
+        for(let i = 0  ; i < num ; i++){
+            let inst = <DimensionComp anterior = {""}id = {i}></DimensionComp>;
             
             
             
-            this.state.dims.push(inst)
+            this.state.dims.push(<h4 style = {{display:"inline",borderRadius:"10%"}}class = 'bg-dark text-primary'>{'A'+(i+1)}</h4>,inst)
             console.log(this.state.dims)
-
-            
-            
         }
+        
 
 
         this.setState({matsAmount:parseInt(e.target.value)})
@@ -460,14 +459,9 @@ class  App extends React.Component {
 
     }
 
-    updateClassMat2 = (n, fila, columna)=>{
+    updateClassMat2 = (n, fila, columna,i)=>{
         let num = parseInt(n)
-        if(this.state.dims.length>num){
-            this.state.dims.pop()
-
-        }
-        else{
-            
+        
 
             let l = this.state.dims.length
             let anterior=false;
@@ -476,12 +470,12 @@ class  App extends React.Component {
             
             
             
-            this.state.dims.push(inst)
+            this.state.dims.push(<h4 style = {{display:"inline",borderRadius:"10%"}}class = 'bg-dark text-primary'>{'A'+(i+1)}</h4>, inst)
             console.log(this.state.dims)
 
             
             
-        }
+        
 
 
         this.setState({matsAmount:parseInt(n)})
