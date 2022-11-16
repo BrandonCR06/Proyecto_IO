@@ -443,7 +443,7 @@ class App extends React.Component {
             this.state.codigos+"\n",
             this.state.pesos
         ], { type: 'text/plan;charset=utf8'});
-        fileSaver.saveAs( blob, "series.txt");
+        fileSaver.saveAs( blob, "arbol.txt");
 
     }
 
