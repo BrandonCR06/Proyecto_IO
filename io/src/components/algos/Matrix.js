@@ -177,6 +177,7 @@ class MatrixComp extends React.Component{
         //console.log(this.state.tablaP)
         //this.setAddModalOpen(true);
         //console.log(this.calcularRutaCorta(3,2))
+        console.log(multMatT[1])
         
     
         return (
@@ -220,7 +221,7 @@ function desplegarTablas(datos){
 function ColumnsDark(bg,col){
     
     return (        
-        <td  class = {bg+"noborder wid"} scope="col">{col}</td>
+        <td  class = {bg+"noborder bg-opacity-10 wid"} scope="col">{col}</td>
     )
 }
 function Columns(bg,col){
@@ -247,7 +248,7 @@ function Tabla(filas, matrix) {
         cols.push(ColumnsDark('text-white bg-dark ',i+1))
         for(let j =0;j <matrix.length;j++){
             
-            cols.push(Columns('text-white bg-primary bg-opacity-50 ',matrix[i][j]))
+            cols.push(Columns('text-white bg-primary',matrix[i][j]))
             
 
         }
@@ -521,7 +522,7 @@ componentDidUpdate (){
         
    
     return(
-        <div  id = "1" className = "p-5 ms-auto">       
+        <div  id = "1" class = "p-5 ms-auto">       
         <h1 className='text-center text-white'>Multiplicación de matrices </h1>            
         <div className="mb-3 cont">            
         <h2 id="fileInput" className=' text-primary'>Seleccionar un archivo de prueba:</h2>            
@@ -532,7 +533,7 @@ componentDidUpdate (){
         <h2 className=' text-white'> Crear dinámicamente:</h2>    
         <br></br>
         <p className=' text-white'>Ingrese la cantidad de matrices</p>         
-        <input id="numMatrices" onChange={this.updateClassMat} className='form-control text-white bg-dark' type="number"></input><br/>
+        <input id="numMatrices" onChange={this.updateClassMat} class='form-control text-white bg-dark' type="number"></input><br/>
         
         
 
@@ -555,13 +556,13 @@ componentDidUpdate (){
 
         </div>
         {this.state.inputLinkClicked?
-        <div>
-        <h2 className=' text-white'>Creado dinámicamente:</h2>            
-        <br></br>
-        <MatrixComp dims = {this.state.dimsData}></MatrixComp> 
-        <br></br>
-        <button onClick={this.saveFile} type="button" class="btn btn-secondary btn-outline-white">Grabar archivo</button>
-        </div>
+            <div>
+            <h2 className=' text-white'>Creado dinámicamente:</h2>            
+            <br></br>
+            <MatrixComp dims = {this.state.dimsData}></MatrixComp> 
+            <br></br>
+            <button onClick={this.saveFile} type="button" class="btn btn-secondary btn-outline-white">Grabar archivo</button>
+            </div>
 
 
 

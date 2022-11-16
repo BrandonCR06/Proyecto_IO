@@ -84,7 +84,7 @@ class ArbolAlgo extends React.Component {
         console.log()
         console.log("TABLA M")
         console.log(A)
-        return [R,A]
+        return [A,R]
     }   
 
     makeParameter1 = (llaves, pesos)=>{
@@ -151,13 +151,15 @@ class ArbolAlgo extends React.Component {
 
         // Se llama al funciòn
         let arbol = this.arbolOptimo(llavesOrdenado, pesosOrdenado);
-
+       
         return (
             <div>
-            <h2 className='text-white'>Tabla R</h2>
-            {desplegarTablas([Tabla([],arbol[0])])}
-            <h2 className='text-white'>Tabla A</h2>
+            <h4 class='text-white'>Tabla R</h4>            
             {desplegarTablas([Tabla([],arbol[1])])}
+
+            <br></br>
+            <h4 class='text-white'>Tabla A</h4>
+            {desplegarTablas([Tabla([],arbol[0])])}
              </div>
         )
     }
@@ -191,7 +193,7 @@ function desplegarTablas(datos){
 function ColumnsDark(bg,col){
     
     return (        
-        <td class = {bg+"noborder wid"} scope="col">{col}</td>
+        <td  class = {bg+"noborder bg-opacity-10 wid"} scope="col">{col}</td>
     )
 }
 function Columns(bg,col){
@@ -218,7 +220,7 @@ function Tabla(filas, matrix) {
         cols.push(ColumnsDark('text-white bg-dark ',i+1))
         for(let j =0;j <matrix.length;j++){
             
-            cols.push(Columns('text-white bg-primary bg-opacity-50 ',matrix[i][j]))
+            cols.push(Columns('text-white bg-primary',matrix[i][j]))
             
 
         }
@@ -256,8 +258,6 @@ function Tabla(filas, matrix) {
         );
     
 }
-
-
 class App extends React.Component {
     constructor(props) {
         super(props);
@@ -454,7 +454,7 @@ class App extends React.Component {
     ) {
     
     return (
-        <div  id = "1" className = "p-5 ms-auto">       
+        <div  id = "1" class = "p-5 ms-auto">       
         <h1 className='text-center text-white'>Arboles Binarios de Busqueda Optimos</h1>            
         <div className="mb-3 cont">            
             <h2 id="fileInput" className=' text-primary'>Seleccionar un archivo de prueba:</h2>            
@@ -467,6 +467,8 @@ class App extends React.Component {
             <p className=' text-white'>Ingrese el número de llaves</p>         
             <input id="keys" onChange={this.handleN} className='form-control text-white bg-dark' type="number"></input><br/>
             {this.desplegarTablaInputs()}
+            </div>
+            <div>
             <button onClick={this.handleArbol} type="button" class="btn btn-secondary btn-outline-white">Generar Algoritmo</button><br></br>
             {this.state.inputLinkClicked?           
                 <div>
