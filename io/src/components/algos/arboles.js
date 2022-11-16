@@ -188,6 +188,12 @@ function desplegarTablas(datos){
 }
 
 
+function ColumnsDark(bg,col){
+    
+    return (        
+        <td class = {bg+"noborder wid"} scope="col">{col}</td>
+    )
+}
 function Columns(bg,col){
     
     return (        
@@ -198,11 +204,21 @@ function Tabla(filas, matrix) {
     //cambiar el color
     let rows = [] 
     if(matrix){
-       
+    let coles = []
+    coles.push(ColumnsDark('text-white bg-dark ',''))
+
+    for(let i =0;i <matrix.length;i++){
+        
+        coles.push(ColumnsDark('text-white bg-dark ',i+1))
+    }
+    rows.push(coles)
+
     for(let i =0;i <matrix.length;i++){
         let cols = []        
+        cols.push(ColumnsDark('text-white bg-dark ',i+1))
         for(let j =0;j <matrix.length;j++){
-            cols.push(Columns('text-white bg-primary',matrix[i][j]))
+            
+            cols.push(Columns('text-white bg-primary bg-opacity-50 ',matrix[i][j]))
             
 
         }
@@ -240,7 +256,6 @@ function Tabla(filas, matrix) {
         );
     
 }
-
 
 
 class App extends React.Component {

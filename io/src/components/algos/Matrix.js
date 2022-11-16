@@ -5,13 +5,25 @@ import FloydModal from '../FloydModal';
 import fileSaver from "file-saver";
 
 
-
+function isNumber(char) {
+    if (typeof char !== 'string') {
+      return false;
+    }
+  
+    if (char.trim() === '') {
+      return false;
+    }
+  
+    return !isNaN(char);
+  }
+  
  
 class MatrixComp extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
-            dims:[]
+            dims:[],
+            res:[]
         };
       
       }
@@ -101,63 +113,44 @@ class MatrixComp extends React.Component{
           rj = rj+1
           j = rj
       }
-      console.log("TABLA R")
-      console.log(R)	
-      console.log()
-      console.log("TABLA M")
-      console.log(M)
+     
       return [R,M]
    }
-   getOrderMat=(M,matList)=>{
-      let n = M.length
-      let currentN = n
-      let start= 0
-      let res = matList
-      while (true){
-        if(M[start][currentN-1-1]== 0){
-              
-            break
-        }
-          let val = M[start][currentN-1]
-        if(start+1!= val){
-          res.splice(res.indexOf(start+1),0, '( ')
-          res.splice(res.indexOf(val)+1,0, ' )')
-          
-        }
-        if(val+1!= currentN){
-          res.splice(res.indexOf(val+1),0, ' (')
-          res.splice(res.indexOf(currentN)+1,0, ' )')
-         
-        }
-        console.log(res)
-          
-          if(M[start][currentN-1]==start+1){
-  
-              start+=1
-              
-          }
-          else{
-              currentN-=1
-          }
-      }
-  
-      let r = ''
-      console.log(res)
-      for (let i = 0 ; i < res.length; i ++){
-            console.log(parseInt(res[i]))
-           if(!parseInt(res[i])){
-                r+=res[i]+" "           
 
-           }
-            
-            else {
-                r+='A'+res[i]+" "
-            }
+ print0ptimal_parens=(s, i, j)=>{
+    if(i == j){
+        this.state.res.push("A")
+        this.state.res.push(i)
+    }else{
+    this.state.res.push(" ( ")
+
+    this.print0ptimal_parens(s, i, s[i-1][j-1])
+    this.print0ptimal_parens(s, s[i-1][j-1] + 1, j)
+    this.state.res.push(" ) ")
+    }
+ }
+
+ parseRes=()=>{
+    let ans = []
+    for(let k = 0; k <this.state.res.length; k++){
+        ans.push(this.state.res[k])
+    }
+    console.log(ans)
+    for(let i = 0 ; i < ans.length; i ++){
+        if(Number.isInteger(ans[i])){
+            if(ans[i+1]=='A'){
                 
-      }
-      return r
-   }
-  
+                ans.splice(i+1,0, '•')
+                i++
+                
+                console.log(ans)
+
+            }
+        }
+    }
+    return ans;
+ }
+   
   
       
     render(){            
@@ -170,13 +163,17 @@ class MatrixComp extends React.Component{
       g.push(k+1)
   }
   let multMatT = this.multMat(l);
-  let a = this.getOrderMat(multMatT[0],g)
+  //let a = this.getOrderMat(multMatT[0],g)
+  this.state.res = []
+   this.print0ptimal_parens(multMatT[0],1,multMatT[0].length)
+   let a = this.parseRes()
+   
 
         
        
         //let  m =this.calculateLocalia(this.props.pqh,this.props.pqr,this.props.mejorDeN,this.props.localias.reverse()) 
         //console.log(m, this.props.pqh,this.props.pqr,this.props.mejorDeN, this.props.localias)
-        console.log(a)
+        //console.log(a)
         //console.log(this.state.tablaP)
         //this.setAddModalOpen(true);
         //console.log(this.calcularRutaCorta(3,2))
@@ -220,6 +217,12 @@ function desplegarTablas(datos){
 }
 
 
+function ColumnsDark(bg,col){
+    
+    return (        
+        <td  class = {bg+"noborder wid"} scope="col">{col}</td>
+    )
+}
 function Columns(bg,col){
     
     return (        
@@ -230,11 +233,21 @@ function Tabla(filas, matrix) {
     //cambiar el color
     let rows = [] 
     if(matrix){
-       
+    let coles = []
+    coles.push(ColumnsDark('text-white bg-dark ',''))
+
+    for(let i =0;i <matrix.length;i++){
+        
+        coles.push(ColumnsDark('text-white bg-dark ',i+1))
+    }
+    rows.push(coles)
+
     for(let i =0;i <matrix.length;i++){
         let cols = []        
+        cols.push(ColumnsDark('text-white bg-dark ',i+1))
         for(let j =0;j <matrix.length;j++){
-            cols.push(Columns('text-white bg-primary bg-opacity-25 ',matrix[i][j]))
+            
+            cols.push(Columns('text-white bg-primary bg-opacity-50 ',matrix[i][j]))
             
 
         }
